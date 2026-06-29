@@ -385,18 +385,122 @@
     .window {
       min-width: auto;
       width: 96vw;
-      top: 5%;
+      top: 2%;
       left: 2%;
       transform: none;
-      max-height: 90vh;
+      max-height: 92vh;
+      border-radius: 4px;
     }
     .sidebar {
-      width: 60px;
+      width: 50px;
+      min-width: 50px;
+      padding: 8px 0;
+    }
+    .sidebar-section {
+      display: none;
+    }
+    .sidebar-item {
+      padding: 6px 8px;
+      font-size: 0.7rem;
+      justify-content: center;
+      gap: 0;
     }
     .sidebar-item span:not(.icon-only) {
       display: none;
     }
-    .desktop-icons { display: none; }
+    .sidebar-item .badge {
+      display: none;
+    }
+    .desktop-icons {
+      display: none;
+    }
+    .email-sender {
+      min-width: 60px;
+      font-size: 0.7rem;
+    }
+    .email-subject {
+      font-size: 0.75rem;
+    }
+    .email-snippet {
+      font-size: 0.65rem;
+    }
+    .email-time {
+      font-size: 0.6rem;
+      min-width: 40px;
+    }
+    .email-detail {
+      padding: 14px;
+    }
+    .email-detail .email-body {
+      font-size: 0.8rem;
+    }
+    .window-toolbar {
+      gap: 8px;
+      font-size: 0.7rem;
+    }
+    .toolbar-btn {
+      font-size: 0.65rem;
+      padding: 4px 6px;
+    }
+    .desktop-clock {
+      bottom: 40px;
+      right: 10px;
+    }
+    .clock-time {
+      font-size: 1.5rem;
+    }
+    .clock-date {
+      font-size: 0.65rem;
+    }
+    .attachment {
+      display: block;
+      margin: 8px 0;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .window {
+      width: 100vw;
+      top: 0;
+      left: 0;
+      border-radius: 0;
+      max-height: 100vh;
+      border: none;
+    }
+    .window-titlebar {
+      padding: 8px 10px;
+    }
+    .window-title {
+      font-size: 0.65rem;
+    }
+    .email-item {
+      padding: 10px 8px;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .email-sender {
+      font-size: 0.65rem;
+      min-width: 50px;
+    }
+    .email-subject {
+      font-size: 0.7rem;
+    }
+    .email-detail .email-from {
+      font-size: 0.85rem;
+    }
+    .email-detail .email-body {
+      font-size: 0.75rem;
+      line-height: 1.7;
+    }
+    .sidebar {
+      width: 40px;
+      min-width: 40px;
+    }
+    .sidebar-item {
+      padding: 4px 4px;
+      font-size: 0.7rem;
+    }
   }
 </style>
 </head>

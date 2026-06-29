@@ -223,6 +223,87 @@
     white-space: nowrap;
     z-index: 0;
   }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .classified-container {
+      padding: 16px 8px 40px;
+    }
+    .password-gate {
+      margin: 40px auto;
+      padding: 24px 16px;
+    }
+    .password-gate .gate-icon {
+      font-size: 2.5rem;
+    }
+    .password-gate .gate-title {
+      font-size: 1rem;
+    }
+    .doc-cover {
+      padding: 30px 20px;
+    }
+    .doc-cover .top-secret {
+      font-size: 2rem;
+      letter-spacing: 0.15em;
+    }
+    .doc-cover .doc-title-official {
+      font-size: 1.1rem;
+    }
+    .doc-page {
+      padding: 20px 14px;
+      font-size: 0.82rem;
+      line-height: 1.7;
+    }
+    .doc-page h3 {
+      font-size: 1rem;
+    }
+    .doc-page table {
+      font-size: 0.65rem;
+    }
+    .doc-page table th,
+    .doc-page table td {
+      padding: 6px 8px;
+    }
+    .classification-mark {
+      top: 10px;
+      right: 10px;
+      font-size: 0.55rem;
+      padding: 3px 8px;
+    }
+    .important-text {
+      padding: 10px 14px;
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .doc-cover .top-secret {
+      font-size: 1.5rem;
+    }
+    .doc-cover .doc-title-official {
+      font-size: 0.95rem;
+    }
+    .doc-page {
+      padding: 14px 10px;
+      font-size: 0.72rem;
+    }
+    .doc-page table {
+      font-size: 0.55rem;
+      display: block;
+      overflow-x: auto;
+    }
+    .doc-page table th,
+    .doc-page table td {
+      padding: 4px 6px;
+    }
+    .password-gate {
+      margin: 20px auto;
+      padding: 20px 12px;
+    }
+    .important-text {
+      font-size: 0.72rem;
+    }
+  }
 </style>
 </head>
 <body data-page="lab-report">

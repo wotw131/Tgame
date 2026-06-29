@@ -348,6 +348,93 @@
   .back-link:hover {
     color: #ccc;
   }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .case-container {
+      padding: 16px 8px 40px;
+    }
+    .case-header-card {
+      padding: 18px 16px;
+    }
+    .case-title-big {
+      font-size: 1.3rem;
+    }
+    .case-subtitle {
+      font-size: 0.7rem;
+    }
+    .info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .info-grid .info-cell {
+      padding: 10px 12px;
+    }
+    .info-grid .info-label {
+      font-size: 0.6rem;
+    }
+    .info-grid .info-value {
+      font-size: 0.75rem;
+    }
+    .db-header {
+      padding: 8px 12px;
+      font-size: 0.65rem;
+    }
+    .db-header .db-logo {
+      font-size: 0.7rem;
+    }
+    .db-header .db-status,
+    .db-header .db-user {
+      display: none;
+    }
+    .satellite-compare {
+      flex-direction: column;
+    }
+    .satellite-img .img-placeholder {
+      height: 120px;
+    }
+    .section-body {
+      padding: 14px;
+      font-size: 0.8rem;
+    }
+    .evidence-list li {
+      font-size: 0.7rem;
+      padding: 8px 10px;
+    }
+    .evidence-list li .ev-id {
+      min-width: 50px;
+      font-size: 0.65rem;
+    }
+    .investigator-note {
+      font-size: 0.78rem;
+      padding: 12px 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+    .case-title-big {
+      font-size: 1.1rem;
+    }
+    .case-header-card {
+      padding: 14px 12px;
+    }
+    .section-header {
+      font-size: 0.85rem;
+      padding: 10px 12px;
+    }
+    .section-body {
+      padding: 10px;
+      font-size: 0.75rem;
+    }
+    .code-area {
+      padding: 12px;
+    }
+    .code-hint {
+      font-size: 0.7rem;
+    }
+  }
 </style>
 </head>
 <body data-page="case-file">

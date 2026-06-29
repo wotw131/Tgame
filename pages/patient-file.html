@@ -261,6 +261,93 @@
     margin-top: 16px;
     font-family: var(--font-mono);
   }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .patient-container {
+      padding: 16px 8px 40px;
+    }
+    .code-gate {
+      margin: 40px auto;
+      padding: 24px 14px;
+    }
+    .file-header {
+      padding: 14px 16px;
+    }
+    .file-header .file-title {
+      font-size: 1.1rem;
+    }
+    .file-body {
+      padding: 16px;
+    }
+    .patient-photo {
+      width: 80px;
+      height: 100px;
+      font-size: 1.5rem;
+      margin: 0 0 10px 12px;
+    }
+    .file-value.large {
+      font-size: 1rem;
+    }
+    .file-label {
+      font-size: 0.55rem;
+    }
+    .file-value {
+      font-size: 0.78rem;
+    }
+    .memory-compare {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .memory-col p {
+      font-size: 0.7rem !important;
+    }
+    .pulse-border {
+      padding: 12px;
+    }
+    .monitoring-note p {
+      font-size: 0.78rem !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .code-gate {
+      margin: 20px auto;
+      padding: 18px 10px;
+    }
+    .file-header {
+      padding: 10px 12px;
+    }
+    .file-header .file-title {
+      font-size: 0.95rem;
+    }
+    .file-header .file-code {
+      font-size: 0.6rem;
+    }
+    .file-body {
+      padding: 10px;
+    }
+    .file-value {
+      font-size: 0.7rem;
+      line-height: 1.5;
+    }
+    .patient-photo {
+      width: 60px;
+      height: 75px;
+      font-size: 1.2rem;
+      margin: 0 0 6px 8px;
+    }
+    .file-section {
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+    }
+    .monitoring-note {
+      padding: 12px;
+    }
+    .monitoring-note p {
+      font-size: 0.7rem !important;
+    }
+  }
 </style>
 </head>
 <body data-page="patient-file">

@@ -236,6 +236,90 @@
     font-size: 0.65rem;
     color: #345;
   }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .forum-wrapper {
+      padding: 12px 6px;
+    }
+    .forum-header {
+      padding: 12px 14px;
+    }
+    .forum-title {
+      font-size: 1.1rem;
+    }
+    .forum-nav {
+      font-size: 0.65rem;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .thread-header {
+      grid-template-columns: 1fr 70px 40px 60px;
+      font-size: 0.6rem;
+      padding: 8px 10px;
+      gap: 4px;
+    }
+    .thread-item {
+      grid-template-columns: 1fr 70px 40px 60px;
+      font-size: 0.7rem;
+      padding: 10px;
+      gap: 4px;
+    }
+    .thread-item .thread-author {
+      font-size: 0.6rem;
+    }
+    .thread-item .thread-replies {
+      font-size: 0.6rem;
+    }
+    .thread-item .thread-last {
+      font-size: 0.55rem;
+    }
+    .post {
+      margin-bottom: 8px;
+    }
+    .post-header {
+      padding: 8px 10px;
+      font-size: 0.65rem;
+    }
+    .post-body {
+      padding: 12px;
+      font-size: 0.75rem;
+      line-height: 1.6;
+    }
+    .forum-archive-notice {
+      font-size: 0.65rem;
+      padding: 8px 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .thread-header {
+      grid-template-columns: 1fr 50px 30px 50px;
+      font-size: 0.55rem;
+      padding: 6px;
+    }
+    .thread-item {
+      grid-template-columns: 1fr 50px 30px 50px;
+      font-size: 0.65rem;
+      padding: 8px 6px;
+    }
+    .thread-item .thread-author {
+      font-size: 0.55rem;
+    }
+    .thread-item .thread-last {
+      display: none;
+    }
+    .thread-header span:last-child {
+      display: none;
+    }
+    .forum-title {
+      font-size: 1rem;
+    }
+    .post-body {
+      font-size: 0.7rem;
+      padding: 10px;
+    }
+  }
 </style>
 </head>
 <body data-page="forum">

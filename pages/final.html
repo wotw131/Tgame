@@ -335,10 +335,120 @@
     }
     .surv-sidebar {
       width: 100%;
-      max-height: 200px;
+      max-height: 180px;
+    }
+    .surv-sidebar .sidebar-header {
+      padding: 8px 12px;
+      font-size: 0.6rem;
+    }
+    .surv-log {
+      padding: 8px 10px;
+      font-size: 0.6rem;
+      line-height: 1.6;
+    }
+    .webcam-feed .feed-container {
+      width: 90%;
+      aspect-ratio: 4/3;
+    }
+    .webcam-feed {
+      padding: 12px 0;
+      min-height: 40vh;
+    }
+    .surv-topbar {
+      padding: 6px 10px;
+      font-size: 0.55rem;
+    }
+    .surv-bottombar {
+      padding: 6px 10px;
+      font-size: 0.55rem;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .cam-rec-indicator {
+      font-size: 0.55rem;
+    }
+    .cam-timestamp {
+      font-size: 0.55rem;
+    }
+    .cam-subject-label {
+      font-size: 0.55rem;
+    }
+    .silhouette {
+      width: 70px;
+      height: 90px;
+    }
+    .silhouette .head {
+      width: 35px;
+      height: 38px;
+    }
+    .silhouette .body {
+      width: 50px;
+      height: 42px;
+      margin: 3px auto 0;
+    }
+    .message-content .glitch-text {
+      font-size: 2rem;
+    }
+    .message-content .sub-text {
+      font-size: 0.85rem;
+    }
+    .message-content .final-line {
+      font-size: 0.75rem;
+    }
+    .final-message .message-content {
+      padding: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .surv-topbar {
+      font-size: 0.5rem;
+      padding: 4px 8px;
+    }
+    .surv-bottombar {
+      font-size: 0.48rem;
+      padding: 4px 8px;
+    }
+    .webcam-feed {
+      min-height: 35vh;
+      padding: 8px 0;
     }
     .webcam-feed .feed-container {
       width: 95%;
+    }
+    .surv-sidebar {
+      max-height: 150px;
+    }
+    .surv-log {
+      font-size: 0.55rem;
+      padding: 6px 8px;
+    }
+    .message-content .glitch-text {
+      font-size: 1.5rem;
+      letter-spacing: 0.1em;
+    }
+    .message-content .sub-text {
+      font-size: 0.75rem;
+      line-height: 1.6;
+    }
+    .message-content .final-line {
+      font-size: 0.7rem;
+    }
+    .message-content button {
+      width: 100%;
+      margin: 4px 0;
+    }
+    .silhouette {
+      width: 50px;
+      height: 65px;
+    }
+    .silhouette .head {
+      width: 25px;
+      height: 28px;
+    }
+    .silhouette .body {
+      width: 38px;
+      height: 30px;
     }
   }
 </style>
