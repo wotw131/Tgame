@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>帖子不可用 — 午夜真相论坛</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body { background:#0a0e14; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+  .unavailable { max-width:500px; text-align:center; padding:40px; }
+  .unavailable h3 { color:#567; margin-bottom:16px; }
+  .unavailable .reason { color:#345; font-size:0.8rem; line-height:1.8; margin-bottom:20px; }
+  .unavailable .meta { color:#2a3a4a; font-size:0.65rem; font-family:monospace; }
+</style>
+</head>
+<body data-page="unavailable">
+
+<div class="unavailable">
+  <h3>🚫 此帖子不可用</h3>
+  <div class="reason" id="reason">
+    该帖子已被远程服务器删除或锁定。<br>
+    可能原因：违反版规 · 包含未验证信息 · <span style="color:#2a3a4a;">外部干预</span>
+  </div>
+  <div class="meta">
+    缓存时间戳：2005-03-17 04:12:08<br>
+    HTTP状态码：410 Gone<br>
+    服务器：Apache/1.3 · 已停止维护
+  </div>
+  <p style="margin-top:24px;"><a href="forum.html" style="color:#456;font-size:0.7rem;text-decoration:none;">← 返回论坛</a></p>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+if (id === 'science') {
+  document.getElementById('reason').innerHTML = '【被驳斥的帖子】<br><br>发帖人"科学解密"声称鸦岭事件是"集体癔症"。<br>引用了三篇学术论文——论文编号经查证均不存在。<br>该用户账号已被封禁。<br><br>最后回复（2004-12-03）：<br>"你是他们的人吧？——真相追寻者"<br><br>此帖后被锁定。';
+} else if (id === 'survivor') {
+  document.getElementById('reason').innerHTML = '【已删除的帖子】<br><br>标题：【曝光】我知道鸦岭村的幸存者名单<br>发帖人：没有明天<br>发帖日期：2005-03-14<br><br>该帖子发布后不到12小时即被删除。<br>用户"没有明天"最后登录时间：2005-03-14 23:47<br>此后该账号再未登录。<br><br>帖子内容已无法恢复。';
+}
+</script>
+</body>
+</html>

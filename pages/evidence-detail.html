@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>证据详情 — CR-1999-247</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body { background:#0a0a0a; }
+  .detail-container { max-width:700px; margin:0 auto; padding:30px 20px 60px; }
+  .evidence-file {
+    background:#f8f4ec; color:#1a1a1a; font-family:'Noto Serif SC',serif;
+    padding:36px; line-height:2; border-radius:3px; position:relative;
+    box-shadow:0 2px 20px rgba(0,0,0,0.4); margin-top:16px;
+  }
+  .evidence-file::before {
+    content:''; position:absolute; top:0;left:0;width:100%;height:100%;
+    background:repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(139,0,0,0.015) 27px,rgba(139,0,0,0.015) 28px);
+    pointer-events:none; border-radius:3px;
+  }
+  .ev-header { border-bottom:2px solid #333; padding-bottom:14px; margin-bottom:20px; }
+  .ev-header .ev-badge { display:inline-block; padding:4px 12px; font-size:0.7rem;
+    font-family:monospace; letter-spacing:0.1em; margin-bottom:8px; }
+  .badge-deleted { background:#1a1a1a; color:#555; }
+  .badge-restricted { background:rgba(139,0,0,0.1); color:var(--accent-red); border:1px solid rgba(139,0,0,0.3); }
+  .badge-dna { background:rgba(184,134,11,0.1); color:var(--accent-amber); border:1px solid rgba(184,134,11,0.3); }
+  .redacted-line { background:#1a1a1a; color:#1a1a1a; padding:0 6px; cursor:pointer; transition:all 0.3s; }
+  .redacted-line:hover,.redacted-line.revealed { color:var(--accent-red); background:transparent; }
+  .seal-stamp { position:absolute; top:30px; right:30px; border:3px solid var(--accent-red);
+    color:var(--accent-red); padding:10px 18px; font-weight:700; font-size:0.9rem;
+    transform:rotate(15deg); opacity:0.6; pointer-events:none; letter-spacing:0.1em; }
+</style>
+</head>
+<body data-page="evidence-detail">
+
+<div class="detail-container">
+  <a href="case-file.html" style="color:#555;text-decoration:none;font-size:0.8rem;font-family:monospace;">← 返回案件档案</a>
+
+  <!-- Default: EX-004 Deleted -->
+  <div class="evidence-file" id="ex004">
+    <div class="seal-stamp">已删除</div>
+    <div class="ev-header">
+      <span class="ev-badge badge-deleted">EX-004</span>
+      <h3>加密通讯记录（信号截获）</h3>
+      <p style="font-size:0.7rem;color:#888;">状态：<span style="color:var(--accent-red);">已永久删除</span></p>
+    </div>
+    <p>此证据于<strong>2004年6月13日 09:15</strong>被从系统中永久删除。</p>
+    <p>删除操作记录：</p>
+    <p style="font-family:monospace;font-size:0.8rem;background:#f0ece5;padding:12px;border-radius:3px;">
+      操作人：系统管理员<br>
+      权限级别：████<br>
+      删除原因：<span class="redacted-line" onclick="this.classList.toggle('revealed')">文件包含未经授权的监控数据</span><br>
+      关联案件：CR-1999-247<br>
+      备注：<span class="redacted-line" onclick="this.classList.toggle('revealed')">原始录音带已被回收。数字副本全部清除。此证据不再存在。</span>
+    </p>
+    <p style="font-size:0.75rem;color:#999;margin-top:16px;">⚠️ 王建国曾在笔记中提及此证据：<em>"截获了一段通讯。两个人讨论'清理'鸦岭。提到了241个受试者。提到了047号。这段录音是我最重要的证据。"</em></p>
+    <p style="font-size:0.65rem;color:#aaa;text-align:right;">—— 王建国 · 调查笔记 · 2004年3月</p>
+  </div>
+
+  <!-- EX-006: DNA Report -->
+  <div class="evidence-file" id="ex006" style="margin-top:20px;">
+    <div class="ev-header">
+      <span class="ev-badge badge-dna">EX-006</span>
+      <h3>DNA样本分析报告</h3>
+      <p style="font-size:0.7rem;color:#888;">状态：<span style="color:var(--accent-amber);">存疑 · 未被采纳</span></p>
+    </div>
+    <p><strong>样本来源：</strong>鸦岭村村卫生所 · 提取于2003年9月</p>
+    <p><strong>样本数量：</strong>47份有效样本（从卫生所医疗器械表面提取）</p>
+    <p><strong>分析结果：</strong></p>
+    <table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin:12px 0;">
+      <tr style="background:#1a1a1a;color:#ddd;"><td style="padding:6px 10px;">匹配类型</td><td style="padding:6px 10px;">数量</td><td style="padding:6px 10px;">备注</td></tr>
+      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;">全国DNA数据库匹配</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;">31份</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;color:var(--accent-red);">31个"失踪人口"目前全部在世。在不同的城市。用不同的名字。</td></tr>
+      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;">未匹配</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;">16份</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;">数据库中无对应记录</td></tr>
+    </table>
+    <p>此报告于2004年被标注为<strong>"分析错误 · 样本污染"</strong>，不予采纳为证据。</p>
+    <p style="font-size:0.75rem;color:#888;">王建国备注：<em>"31个'死人'还活着。在不同的城市。用不同的名字。这31个人知道自己是鸦岭村的吗？或者说——他们还'记得'吗？"</em></p>
+  </div>
+
+  <!-- EX-007: Sealed -->
+  <div class="evidence-file" id="ex007" style="margin-top:20px;">
+    <div class="seal-stamp" style="top:auto;bottom:40px;">封存</div>
+    <div class="ev-header">
+      <span class="ev-badge badge-restricted">EX-007</span>
+      <h3>王建国私人笔记（封存）</h3>
+      <p style="font-size:0.7rem;color:var(--accent-red);">状态：需要王建国个人密码</p>
+    </div>
+    <p>此证据由王建国警官于<strong>2004年5月</strong>亲自封存。封存时他注明：<em>"只有当我无法继续调查时，才能打开。"</em></p>
+    <p>解封需要王建国的<strong>个人密码</strong>——他的警号。</p>
+    <div style="text-align:center;padding:20px;margin:16px 0;background:#fafaf5;border:1px dashed #ddd;">
+      <input type="text" id="badgeInput" placeholder="输入警号..." style="padding:8px 14px;border:1px solid #ccc;width:200px;text-align:center;font-family:monospace;">
+      <button onclick="tryUnlock()" style="padding:8px 16px;margin-left:8px;cursor:pointer;background:var(--accent-red);color:#fff;border:none;">解锁</button>
+      <div id="unlockResult" style="margin-top:8px;font-size:0.8rem;"></div>
+    </div>
+    <p style="font-size:0.7rem;color:#999;">（王建国的警号在案件档案的其他地方可以找到——但这需要你仔细翻阅他留下的每一份记录。）</p>
+  </div>
+</div>
+
+<script>
+function tryUnlock() {
+  const input = document.getElementById('badgeInput');
+  const result = document.getElementById('unlockResult');
+  if (input.value === '047') {
+    result.innerHTML = '<span style="color:var(--accent-red);">🔓 笔记已解锁。<br><br>王建国的私人笔记只有一句话：<br><br>"YN-047 —— 一个七岁的女孩。她完全不记得鸦岭了。她以为自己是省城的孩子。二十多年过去了，她现在是'林夏'——一个调查记者。她不知道自己在调查的是自己。我不知道该不该告诉她。也许让她活在谎言里更仁慈。但如果有人读到这段话——她已经知道了。告诉她，我很抱歉。"</span>';
+  } else if (input.value.length > 0) {
+    result.innerHTML = '<span style="color:var(--accent-red);">✗ 密码错误。</span>';
+  }
+}
+</script>
+
+</body>
+</html>

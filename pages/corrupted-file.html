@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文件查看器 — 扫描文件_001</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body { background:#0a0a0a; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+  .error-page { max-width:500px; text-align:center; padding:40px; }
+  .error-icon { font-size:5rem; margin-bottom:16px; }
+  .error-code { font-family:monospace; color:var(--accent-red); font-size:1.2rem; margin-bottom:8px; }
+  .error-detail { color:#444; font-size:0.8rem; margin-bottom:20px; line-height:1.8; }
+  .error-hint { color:#2a2a2a; font-size:0.65rem; cursor:pointer; }
+</style>
+</head>
+<body data-page="corrupted">
+
+<div class="error-page">
+  <div class="error-icon">💥</div>
+  <div class="error-code">ERROR 0x80070002</div>
+  <p style="color:#888;font-size:0.9rem;margin-bottom:16px;">文件无法打开</p>
+  <div class="error-detail">
+    文件名：扫描文件_001.pdf<br>
+    大小：1.2 MB<br>
+    创建日期：2003年10月██日<br>
+    最后修改：2004年6月13日 03:47<br><br>
+    文件头校验失败。<br>
+    可能原因：文件损坏 · 不支持的格式 · <span style="color:#333;">文件被远程篡改</span>
+  </div>
+  <p class="error-hint" onclick="this.style.color='var(--accent-red)';this.textContent='警告：检测到未经授权的文件修改。\n原始文件可能包含与鸦岭案相关的扫描文档。\n修改时间与王建国死亡时间高度吻合。\n建议：查找原始纸质文件。';">
+    点击查看系统日志...
+  </p>
+  <p style="margin-top:24px;"><a href="../index.html" style="color:#444;font-size:0.7rem;text-decoration:none;">← 返回桌面</a></p>
+</div>
+
+</body>
+</html>

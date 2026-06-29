@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卫星图像分析报告 — 1999年12月</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body { background:#0d0d0d; }
+  .report-container { max-width:700px; margin:0 auto; padding:30px 20px 60px; }
+  .report {
+    background:#f5f0e8; color:#1a1a1a; font-family:'Noto Serif SC',serif;
+    padding:36px; line-height:2; border-radius:3px; position:relative;
+    box-shadow:0 2px 20px rgba(0,0,0,0.4);
+  }
+  .report::before {
+    content:''; position:absolute; top:0; left:0; width:100%; height:100%;
+    background:repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(139,0,0,0.015) 27px,rgba(139,0,0,0.015) 28px);
+    pointer-events:none; border-radius:3px;
+  }
+  .report h3 { text-align:center; border-bottom:2px solid #333; padding-bottom:12px; margin-bottom:20px; }
+  .data-table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.85rem; }
+  .data-table td { padding:8px 12px; border-bottom:1px solid #ddd; }
+  .data-table td:first-child { color:#666; width:140px; }
+  .conclusion-box { border:2px solid #ddd; padding:16px; margin:16px 0; background:#fafaf5; }
+  .watermark { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-25deg);
+    font-size:5rem; color:rgba(0,0,0,0.03); pointer-events:none; font-weight:900; }
+</style>
+</head>
+<body data-page="satellite">
+
+<div class="report-container">
+  <a href="../index.html" style="color:#555;text-decoration:none;font-size:0.8rem;font-family:monospace;">← 返回桌面</a>
+
+  <div class="report mt-2">
+    <div class="watermark">INCONCLUSIVE</div>
+    <h3>卫星图像分析报告</h3>
+    <p style="text-align:center;font-size:0.8rem;color:#666;">分析对象：鸦岭村区域 · 1999年12月</p>
+    <hr style="border-color:#ddd;margin:12px 0;">
+
+    <table class="data-table">
+      <tr><td>数据来源</td><td>欧洲航天局 · 公开数据集</td></tr>
+      <tr><td>卫星型号</td><td>ERS-2 · 合成孔径雷达</td></tr>
+      <tr><td>目标区域</td><td>H省S市鸦岭乡（坐标已隐去）</td></tr>
+      <tr><td>分析时段</td><td>1999年12月15日 — 2000年1月15日</td></tr>
+      <tr><td>云层覆盖率</td><td style="color:var(--accent-red);">97.3%</td></tr>
+      <tr><td>有效光学图像</td><td>0 帧</td></tr>
+    </table>
+
+    <div class="conclusion-box">
+      <p><strong>分析结论：</strong></p>
+      <p>由于目标区域在分析时段内被大面积云层覆盖（冬季雪云），无法获取有效的可见光卫星图像。雷达图像显示该区域存在"轻微地形变动"，但雷达数据不足以区分山体滑坡与积雪造成的地表变化。</p>
+      <p style="color:#666;font-size:0.85rem;">⚠️ 此报告与官方"山体滑坡"结论不存在直接矛盾——但也<strong>不能</strong>为官方结论提供支持。</p>
+    </div>
+
+    <p style="font-size:0.8rem;color:#888;">注：2000年3月的后续卫星图像（美国LANDSAT-7）在更低云层覆盖率下拍摄，但该数据不在本报告分析范围内。如需查阅后续图像，请向相关机构提出申请。</p>
+
+    <p style="font-size:0.7rem;color:#aaa;text-align:right;margin-top:20px;">
+      分析机构：中国科学院遥感与数字地球研究所<br>
+      报告日期：2001年5月<br>
+      报告编号：RS-2001-05892
+    </p>
+
+    <!-- Hidden clickable area - subtle reference -->
+    <p style="font-size:0.5rem;color:#d5d0c8;text-align:center;margin-top:16px;cursor:default;user-select:text;">
+      本报告由第三方独立分析。分析请求来源：省公安厅刑侦三处。请求人：王建国。请求日期：2001年3月。状态：已交付。
+    </p>
+  </div>
+</div>
+
+</body>
+</html>

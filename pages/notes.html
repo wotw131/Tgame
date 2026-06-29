@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>调查笔记 — 林夏</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body {
+    background: #0d0d0d;
+    background-image: radial-gradient(ellipse at 50% 30%, rgba(20,20,10,0.3) 0%, transparent 70%);
+  }
+  .notes-container {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+  }
+  .notebook {
+    background: #f5f0e5;
+    color: #1a1a1a;
+    font-family: '楷体','KaiTi','Noto Serif SC',serif;
+    border-radius: 3px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  .notebook::before {
+    content: '';
+    position: absolute; top:0; left:0;
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(0deg, transparent, transparent 29px, rgba(139,0,0,0.03) 29px, rgba(139,0,0,0.03) 30px);
+    pointer-events: none; z-index: 1;
+  }
+  .notebook-header {
+    background: #2a2218;
+    color: #c8b898;
+    padding: 20px 28px;
+    text-align: center;
+    position: relative; z-index: 2;
+  }
+  .notebook-header h2 {
+    font-family: '楷体','KaiTi','ZCOOL XiaoWei',serif;
+    letter-spacing: 0.1em;
+    color: #c8b898;
+  }
+  .notebook-body {
+    padding: 28px;
+    position: relative; z-index: 2;
+    line-height: 2.1;
+    font-size: 0.9rem;
+  }
+  .notebook-body .date-header {
+    color: #8b0000;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-top: 24px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #d5c8b0;
+  }
+  .notebook-body .date-header:first-child { margin-top: 0; }
+  .notebook-body .entry {
+    margin-bottom: 12px;
+    padding-left: 12px;
+    border-left: 2px solid #d5c8b0;
+  }
+  .notebook-body .entry.question {
+    border-left-color: #8b0000;
+    color: #8b0000;
+  }
+  .notebook-body .strike {
+    text-decoration: line-through;
+    color: #999;
+  }
+  .notebook-body .arrow {
+    color: #8b0000;
+    font-weight: 700;
+  }
+  .notebook-body .sticky {
+    background: #fff8c0;
+    padding: 8px 14px;
+    margin: 12px 0;
+    font-size: 0.8rem;
+    display: inline-block;
+    transform: rotate(0.5deg);
+    box-shadow: 1px 2px 4px rgba(0,0,0,0.15);
+    border: 1px solid #e8e0a0;
+  }
+  .notebook-body .scribble {
+    font-style: italic;
+    color: #666;
+    font-size: 0.8rem;
+  }
+  .page-smudge {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(139,100,50,0.04);
+    pointer-events: none; z-index: 0;
+  }
+</style>
+</head>
+<body data-page="notes">
+
+<div class="notes-container">
+  <a href="../index.html" style="color:#555;text-decoration:none;font-size:0.8rem;font-family:monospace;">← 返回工作站</a>
+
+  <div class="notebook mt-2">
+    <div class="notebook-header">
+      <h2>🖊️ 调查笔记</h2>
+      <p style="font-size:0.7rem;color:#887766;">林夏 · 私人记录 · 非公开</p>
+    </div>
+    <div class="notebook-body">
+
+      <div class="date-header">📅 2024年11月17日 · 凌晨</div>
+      <div class="entry">
+        收到匿名邮件。发件人自称"也在寻找真相的人"。<br>
+        他提到了鸦岭村——1999年12月31日，247人失踪。<br>
+        官方说是山体滑坡。但他说那是谎言。
+      </div>
+      <div class="entry question">
+        → 为什么选在除夕夜给我发这封邮件？<br>
+        → 这个"匿名线人"知道多少？
+      </div>
+
+      <div class="date-header">📅 关于鸦岭村 · 基本事实</div>
+      <div class="entry">
+        • 案件编号：CR-1999-247<br>
+        • 失踪人数：247人（全村）<br>
+        • 官方结论：山体滑坡<br>
+        • <span class="strike">结案日期：2000年3月15日</span> ← 太快了<br>
+        • 档案于2004年被王建国调阅，再未归还<br>
+        • 王建国于2004年6月12日死亡（"交通事故"）
+      </div>
+
+      <div class="date-header">📅 疑点列表</div>
+      <div class="entry question">
+        1. 没有任何遗体被发现。滑坡掩埋247人却找不到一具尸体？<br>
+        2. 卫星图像显示村庄建筑完好。<br>
+        3. 多个"已故"村民的身份证号在别处被使用。<br>
+        4. 王建国调阅档案→档案失踪→王建国死亡。时间线太紧了。<br>
+        5. 有人提到"夜莺"——一个项目代号。什么意思？
+      </div>
+
+      <div class="date-header">📅 王建国留下的东西</div>
+      <div class="entry">
+        他死前最后一个查询记录中包含了一个词——<br>
+        <span style="font-family:monospace;color:#1a1a1a;background:#1a1a1a;padding:0 8px;cursor:pointer;" onclick="this.style.background='transparent';this.style.color='var(--accent-red)';">N1GHT1NG4L3</span><br>
+        <span class="scribble">（点击黑色块查看）</span><br>
+        这是他的证据库授权码。我用它进入了证据保险库。
+      </div>
+
+      <div class="date-header">📅 证据保险库 · 发现</div>
+      <div class="entry">
+        <strong>张伟的日记：</strong><br>
+        一个村民记录了"医疗队"进村后的变化。他们给村民吃药。<br>
+        吃了药之后会做奇怪的梦——梦见自己是另一个人。<br>
+        日记最后几页笔迹扭曲。他写到了"夜莺"。<br>
+        最后一条是1999年12月30日。<br>
+        日记页脚有一个论坛地址——bbs.crowridge-truth.com/鸦岭<br>
+        <span class="scribble">→ 已访问论坛缓存。线索在继续。</span>
+      </div>
+
+      <div class="entry">
+        <strong>截获的通讯录音：</strong><br>
+        两个人讨论"清理"鸦岭。提到241个"受试者"被转移。<br>
+        提到"047号受试者表现最好——完全接受了新记忆"。<br>
+        提到"王建国"——"已经在处理了。他不会成为问题。"<br>
+        <span class="scribble">→ 王建国是被谋杀的。</span>
+      </div>
+
+      <div class="entry">
+        <strong>现场照片：</strong><br>
+        餐桌摆满年夜饭。无人动过。茶水结冰。<br>
+        村口发现重型车辆轮胎印——至少4辆车。<br>
+        村卫生所后有新填水泥，刻有"YN-P"。
+      </div>
+
+      <div class="date-header">📅 论坛上的信息</div>
+      <div class="entry">
+        午夜真相论坛——2005年被关闭。<br>
+        多位用户从不同角度讨论鸦岭：<br>
+        • "真相追寻者"整理了完整时间线<br>
+        • "山野行者"亲自去过鸦岭——村子还在，有穿制服的人巡逻<br>
+        • "夜行者"提到一份泄露的文件，需要密码访问<br>
+        • 密码是鸦岭事件日期：<span style="font-family:monospace;">19991231</span>
+      </div>
+
+      <div class="sticky">
+        ⚠️ 注意——论坛上有人提到了"047号"。<br>
+        "档案管理员"说他见过一份文件，提到"集体记忆重塑实验"。<br>
+        受试群体：247人。实验地点：鸦岭村。<br>
+        这跟"医疗队"对上了。
+      </div>
+
+      <div class="date-header">📅 核心问题（待解决）</div>
+      <div class="entry question">
+        1. "夜莺计划"到底是什么？<br>
+        2. 047号受试者是谁？为什么她的"记忆植入"成功率最高？<br>
+        3. 还有多少幸存者？他们在哪里？<br>
+        4. 我的"调查"——为什么我对这个案子有如此强烈的执念？<br>
+        <span class="scribble" style="color:var(--accent-red);">（最后一个问题越来越让我不安。）</span>
+      </div>
+
+      <div class="date-header">📅 便签</div>
+      <div class="sticky" style="transform:rotate(-1deg);">
+        匿名线人没有再联系我。<br>
+        省档案局说档案被调阅后未归还。<br>
+        系统管理员说我的账户被未知IP访问过。<br>
+        <br>
+        有人知道我在查这个案子。<br>
+        而且他们比我先一步。
+      </div>
+
+      <div style="text-align:right;color:#999;font-size:0.7rem;margin-top:30px;font-style:italic;">
+        —— 笔记持续更新中 ——
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clue-panel-overlay" id="cluePanelOverlay"></div>
+<div class="clue-panel" id="cluePanel">
+  <h3 style="margin-bottom:16px;font-family:var(--font-serif);">🔍 线索记录</h3>
+  <div class="progress-bar mb-2"><div class="progress-fill" id="clueProgress" style="width:0%;"></div></div>
+  <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:16px;">已发现: <span id="clueCount">0</span> / 12 条线索</div>
+  <div id="clueList"></div>
+</div>
+<div class="clue-tracker"><button class="clue-tracker-btn" id="clueTrackerBtn">🔍</button></div>
+
+<script src="../js/game.js"></script>
+<script>
+  setInterval(() => {
+    const pct = Math.round((Game.cluesFound.length / 12) * 100);
+    const bar = document.getElementById('clueProgress');
+    if (bar) bar.style.width = pct + '%';
+  }, 2000);
+</script>
+</body>
+</html>

@@ -513,7 +513,7 @@
       <span class="icon-img">📁</span>
       <span class="icon-label">冷案数据库</span>
     </div>
-    <div class="desktop-icon" onclick="openNotes()" title="调查笔记">
+    <div class="desktop-icon" onclick="window.open('pages/notes.html','_blank')" title="调查笔记">
       <span class="icon-img">📝</span>
       <span class="icon-label">调查笔记</span>
     </div>
@@ -521,11 +521,11 @@
       <span class="icon-img">🔒</span>
       <span class="icon-label">证据保险库</span>
     </div>
-    <div class="desktop-icon" onclick="openFakeLead()" title="张伟的日记——扫描件">
+    <div class="desktop-icon" onclick="window.open('pages/corrupted-file.html','_blank')" title="扫描文件——可能已损坏">
       <span class="icon-img">📜</span>
       <span class="icon-label">扫描文件_001</span>
     </div>
-    <div class="desktop-icon" onclick="openFakeLead2()" title="卫星图像分析报告">
+    <div class="desktop-icon" onclick="window.open('pages/satellite-report.html','_blank')" title="卫星图像分析">
       <span class="icon-img">🛰️</span>
       <span class="icon-label">卫星图_1999</span>
     </div>
@@ -764,18 +764,6 @@
 
   function openCaseFile() {
     window.open('pages/case-file.html', '_blank');
-  }
-
-  function openNotes() {
-    alert('调查笔记·林夏\n\n鸦岭村 (CR-1999-247)\n——————————————\n已知：1999.12.31 村庄消失\n官方结论：山体滑坡\n\n笔记碎片：\n→ 档案局回复：王建国2004年调阅\n→ 档案未归还\n→ 王建国已故\n→ ???\n\n其他：\n→ 需要更多资料\n→ 翻阅旧报纸\n→ 联系线人\n\n（笔记中夹着一张便签——\n"代号NIGHTINGALE——王建国最后一条查询记录。他在找什么？"）');
-  }
-
-  function openFakeLead() {
-    alert('文件损坏\n\n无法打开 "扫描文件_001.pdf"\n\n错误代码：0x80070002\n文件可能已损坏或格式不受支持。\n\n系统建议：删除此文件。');
-  }
-
-  function openFakeLead2() {
-    alert('卫星图像分析报告 — 1999年12月\n\n来源：欧洲航天局 · 公开数据\n\n分析结论：\n该区域在1999年12月31日前后\n云层覆盖率达97%，无法获取\n有效光学图像。\n\n雷达图像显示可能存在"轻微\n的地形变动"，但无证据支持\n大规模山体滑坡。\n\n注：此报告与官方说法存在矛盾。\n但不足以作为证据。');
   }
 
   // Auto-open the tip email
