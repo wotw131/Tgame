@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>超自然论坛存档 — 鸦岭</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body {
+    background: #0a0e14;
+    font-family: '宋体', 'SimSun', serif;
+  }
+
+  /* Retro forum style */
+  .forum-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .forum-header {
+    background: linear-gradient(180deg, #1a2a40 0%, #0d1520 100%);
+    border: 1px solid #2a3a50;
+    padding: 16px 20px;
+    text-align: center;
+    border-radius: 4px 4px 0 0;
+    margin-bottom: 0;
+  }
+
+  .forum-title {
+    font-size: 1.5rem;
+    color: #4ac;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .forum-subtitle {
+    font-size: 0.75rem;
+    color: #567;
+    margin-top: 4px;
+  }
+
+  .forum-nav {
+    background: #111d2b;
+    border: 1px solid #1a2a3a;
+    border-top: none;
+    padding: 8px 16px;
+    font-size: 0.75rem;
+    color: #567;
+    display: flex;
+    gap: 16px;
+    border-radius: 0 0 4px 4px;
+    margin-bottom: 20px;
+  }
+
+  .forum-nav a {
+    color: #6ab;
+    text-decoration: none;
+  }
+
+  .forum-nav a:hover { color: #8cd; }
+
+  /* Thread list */
+  .thread-list {
+    background: #0d1520;
+    border: 1px solid #1a2a3a;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .thread-header {
+    background: #111d2b;
+    padding: 10px 16px;
+    font-size: 0.75rem;
+    color: #567;
+    display: grid;
+    grid-template-columns: 1fr 120px 80px 100px;
+    gap: 12px;
+  }
+
+  .thread-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #15202e;
+    display: grid;
+    grid-template-columns: 1fr 120px 80px 100px;
+    gap: 12px;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.85rem;
+  }
+
+  .thread-item:hover {
+    background: #15202e;
+  }
+
+  .thread-item.pinned {
+    background: #151d28;
+    border-left: 3px solid var(--accent-amber);
+  }
+
+  .thread-item .thread-title {
+    color: #8ab;
+  }
+
+  .thread-item .thread-author {
+    color: #567;
+    font-size: 0.75rem;
+  }
+
+  .thread-item .thread-replies {
+    color: #567;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  .thread-item .thread-last {
+    color: #456;
+    font-size: 0.7rem;
+    text-align: right;
+  }
+
+  .pin-icon { color: var(--accent-amber); }
+
+  /* Thread content */
+  .thread-view {
+    display: none;
+  }
+
+  .thread-view.active {
+    display: block;
+  }
+
+  .post {
+    background: #0d1520;
+    border: 1px solid #1a2a3a;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .post-header {
+    background: #111d2b;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    border-bottom: 1px solid #1a2a3a;
+  }
+
+  .post-user {
+    color: #6ab;
+    font-weight: 700;
+  }
+
+  .post-user .user-badge {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 2px;
+    margin-left: 6px;
+  }
+
+  .badge-op { background: #4a6; color: #fff; }
+  .badge-mod { background: #a44; color: #fff; }
+  .badge-new { background: #444; color: #888; }
+
+  .post-time {
+    color: #456;
+  }
+
+  .post-body {
+    padding: 16px;
+    line-height: 1.8;
+    color: #9ab;
+    font-size: 0.88rem;
+  }
+
+  .post-body .quote {
+    border-left: 3px solid #2a3a4a;
+    padding: 8px 12px;
+    margin: 8px 0;
+    color: #678;
+    font-size: 0.82rem;
+  }
+
+  /* Deleted posts */
+  .post.deleted .post-body {
+    color: #345;
+    font-style: italic;
+  }
+
+  /* Back button */
+  .thread-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #567;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-bottom: 16px;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    font-family: inherit;
+  }
+
+  .thread-back:hover { color: #8ab; }
+
+  /* Warning banner */
+  .forum-archive-notice {
+    background: rgba(139,0,0,0.1);
+    border: 1px solid rgba(139,0,0,0.3);
+    padding: 10px 16px;
+    font-size: 0.75rem;
+    color: var(--accent-red);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* Hidden link styling */
+  .hidden-link {
+    color: #345;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  .hidden-link:hover {
+    color: var(--accent-red);
+  }
+
+  /* IP address display */
+  .ip-display {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: #345;
+  }
+</style>
+</head>
+<body data-page="forum">
+
+<div class="forum-wrapper">
+  <a href="evidence.html" style="color:#567;text-decoration:none;font-size:0.8rem;">← 返回证据库</a>
+
+  <div class="forum-archive-notice mt-2">
+    ⚠️ 此论坛已于2005年被关闭。以下为缓存存档。部分帖子已损坏或删除。
+  </div>
+
+  <div class="forum-header">
+    <div class="forum-title">🌙 午夜真相 · 超自然论坛</div>
+    <div class="forum-subtitle">Midnight Truth BBS — 存档版本 · 最后抓取: 2005-03-17</div>
+  </div>
+
+  <div class="forum-nav">
+    <span>🏠 首页</span>
+    <span>›</span>
+    <span>🔮 未解之谜</span>
+    <span>›</span>
+    <span style="color:#8ab;">鸦岭</span>
+  </div>
+
+  <!-- Thread List -->
+  <div class="thread-list" id="threadList">
+    <div class="thread-header">
+      <span>主题</span>
+      <span>作者</span>
+      <span>回复</span>
+      <span>最后回复</span>
+    </div>
+    <div class="thread-item pinned" onclick="viewThread('thread-1')">
+      <span class="thread-title"><span class="pin-icon">📌</span> 【整理】鸦岭村事件时间线（持续更新）</span>
+      <span class="thread-author">真相追寻者</span>
+      <span class="thread-replies">47</span>
+      <span class="thread-last">2005-02-28</span>
+    </div>
+    <div class="thread-item" onclick="viewThread('thread-2')">
+      <span class="thread-title">我在鸦岭附近拍到了奇怪的军车</span>
+      <span class="thread-author">山野行者</span>
+      <span class="thread-replies">23</span>
+      <span class="thread-last">2004-11-15</span>
+    </div>
+    <div class="thread-item" onclick="viewThread('thread-3')">
+      <span class="thread-title">有没有人听说过"夜莺计划"？</span>
+      <span class="thread-author">夜行者</span>
+      <span class="thread-replies">31</span>
+      <span class="thread-last">2005-01-07</span>
+    </div>
+    <div class="thread-item" onclick="viewThread('thread-4')">
+      <span class="thread-title">我表姐是鸦岭的幸存者...她说了一些事</span>
+      <span class="thread-author">寻找真相</span>
+      <span class="thread-replies">56</span>
+      <span class="thread-last">2005-03-02</span>
+    </div>
+    <div class="thread-item">
+      <span class="thread-title" style="color:#345;">[已删除] 关于军方的内部文件泄露</span>
+      <span class="thread-author">[已注销]</span>
+      <span class="thread-replies">—</span>
+      <span class="thread-last">—</span>
+    </div>
+  </div>
+
+  <!-- Thread 1: Timeline -->
+  <div class="thread-view" id="thread-1">
+    <button class="thread-back" onclick="backToList()">← 返回帖子列表</button>
+
+    <div class="post">
+      <div class="post-header">
+        <span><span class="post-user">真相追寻者 <span class="user-badge badge-op">楼主</span></span></span>
+        <span class="post-time">2004-08-15 03:47</span>
+      </div>
+      <div class="post-body">
+        <strong style="font-size:1.1rem;">鸦岭村事件完整时间线</strong>
+        <p class="mt-2">我花了两年时间收集关于鸦岭村的信息。以下是我整理的时间线：</p>
+        <p><strong>1999年11月初</strong> — 一支自称"省医疗队"的队伍进入鸦岭村，开始对全体村民进行"体检"。</p>
+        <p><strong>1999年12月</strong> — 村民们开始报告奇怪的症状：记忆混乱、身份混淆、集体噩梦。</p>
+        <p><strong>1999年12月29-30日</strong> — 多辆军用卡车被目击驶向鸦岭村方向。</p>
+        <p><strong>1999年12月31日</strong> — 鸦岭村247名村民全部"消失"。无目击者。</p>
+        <p><strong>2000年1月</strong> — 官方宣布"山体滑坡"。没有找到任何遗体。</p>
+        <p><strong>2003年8月</strong> — 省公安厅王建国警官重启调查。</p>
+        <p><strong>2004年6月</strong> — 王建国"车祸身亡"。调查终止。</p>
+        <p class="mt-2" style="color:#8ab;"><strong>关键疑点：</strong></p>
+        <p>• 为什么一个"医疗队"需要军用卡车？</p>
+        <p>• 卫星图像显示村庄完好 — 滑坡在哪？</p>
+        <p>• 247个人，没有一个"亲戚"出来寻找？</p>
+        <p class="mt-2" style="color:var(--accent-red);">⚠️ 我最近收到了一条私信。发信人声称自己曾是"项目"的内部人员。他说这个项目叫<strong>"夜莺"</strong>，和一个代码有关：<strong>19991231</strong>。有人知道这个代码是什么意思吗？</p>
+      </div>
+    </div>
+
+    <div class="post">
+      <div class="post-header">
+        <span><span class="post-user">夜行者 <span class="user-badge badge-new">新</span></span></span>
+        <span class="post-time">2004-08-16 22:13</span>
+      </div>
+      <div class="post-body">
+        <div class="quote">真相追寻者 说：这个项目叫"夜莺"，和一个代码有关：19991231</div>
+        <p>19991231 — 那是鸦岭村失踪的日期。1999年12月31日。</p>
+        <p>我查过一些资料。"夜莺计划"（Project Nightingale）在公开渠道完全不存在。但是...</p>
+        <p>我在一个<span class="hidden-link" onclick="this.style.color='var(--accent-red)';Game.addClue('forum-lab-link','论坛中的实验线索','论坛用户提到了一份泄露文件，其中包含实验的详细信息。访问密码是鸦岭村失踪的日期。');document.getElementById('labLink').style.display='block';">军方旧档案的缓存页面里</span>找到了一些东西。需要密码才能访问。</p>
+        <div id="labLink" style="display:none;margin-top:12px;padding:10px;background:#151d28;border-radius:3px;">
+          <p style="color:var(--accent-red);">🔗 <a href="lab-report.html" style="color:var(--accent-red);">点击这里访问泄露文档</a></p>
+          <p style="font-size:0.7rem;color:#567;">密码提示：鸦岭事件发生的日期。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="post">
+      <div class="post-header">
+        <span><span class="post-user">山野行者</span></span>
+        <span class="post-time">2004-09-03 15:40</span>
+      </div>
+      <div class="post-body">
+        <p>我去过鸦岭。去年的事。</p>
+        <p>村子还在。建筑还在。但是一个人都没有。那种空...不是被遗弃的空。更像是<strong>所有人同时消失</strong>了。</p>
+        <p>在村卫生所后面，我看到了一个被封死的地下室入口。水泥是新的，和周围的旧建筑格格不入。上面刻着三个字母：<strong>YN-P</strong>。</p>
+        <p>我试图撬开，但被巡逻的人发现了——那里现在有<span style="color:var(--accent-red);">军人巡逻</span>。一个废弃20年的村子，为什么还需要军人巡逻？</p>
+      </div>
+    </div>
+
+    <div class="post deleted">
+      <div class="post-header">
+        <span><span class="post-user">[用户已注销]</span></span>
+        <span class="post-time">2005-01-12 04:55</span>
+      </div>
+      <div class="post-body">
+        [此帖子已被删除。原内容涉及敏感信息。]
+        <br><span style="font-size:0.65rem;color:#345;">删除原因：违反版规第7条——禁止发布未经验证的政府机密信息。</span>
+      </div>
+    </div>
+
+    <div class="post">
+      <div class="post-header">
+        <span><span class="post-user">真相追寻者 <span class="user-badge badge-op">楼主</span></span></span>
+        <span class="post-time">2005-02-28 02:59</span>
+      </div>
+      <div class="post-body">
+        <p style="color:var(--accent-red);">他们找到了这个论坛。</p>
+        <p>昨天起，好几个老用户都联系不上了。包括给我发私信的那个人。</p>
+        <p>我不知道我还能不能继续更新。如果有人看到这个帖子——<strong>把信息保存下来。不要让他们抹掉一切。</strong></p>
+        <p>真相在 <span style="font-family:var(--font-mono);">19991231</span> 后面。</p>
+        <p style="color:#567;">—— 如果这个帖子还在，就说明我还活着。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thread 2: Military vehicles -->
+  <div class="thread-view" id="thread-2">
+    <button class="thread-back" onclick="backToList()">← 返回帖子列表</button>
+    <div class="post">
+      <div class="post-header">
+        <span><span class="post-user">山野行者 <span class="user-badge badge-op">楼主</span></span></span>
+        <span class="post-time">2004-11-07 19:22</span>
+      </div>
+      <div class="post-body">
+        <strong>我在鸦岭附近拍到了奇怪的军车</strong>
+        <p class="mt-2">上个月去鸦岭乡附近徒步，在距离鸦岭村大约3公里的山路上看到了三辆军车。不是普通的运输车——是那种带卫星天线的，像是移动指挥部。</p>
+        <p>我躲在树后面拍了照。但是回家后，照片里的军车全部变成了<span style="color:var(--accent-red);">模糊的像素块</span>——不是拍糊了，像是被后期处理过。</p>
+        <p>我从来没有编辑过这些照片。</p>
+        <p>有什么技术可以在相机层面自动模糊特定物体吗？这算是军用级的技术吗？</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thread 3: Nightingale -->
+  <div class="thread-view" id="thread-3">
+    <button class="thread-back" onclick="backToList()">← 返回帖子列表</button>
+    <div class="post">
+      <div class="post-header">
+        <span><span class="post-user">夜行者 <span class="user-badge badge-op">楼主</span></span></span>
+        <span class="post-time">2004-12-03 23:58</span>
+      </div>
+      <div class="post-body">
+        <strong>有没有人听说过"夜莺计划"？</strong>
+        <p class="mt-2">我在一份旧报纸的角落里看到了这个词——"夜莺计划"（Project Nightingale）。</p>
+        <p>报纸上说这是一个"心理研究项目"，但没有任何细节。更奇怪的是，提到这个项目的所有文章都在2004年6月之后被撤回了。</p>
+        <p>有人知道这个项目的具体内容吗？它和鸦岭村有什么关系？</p>
+      </div>
+    </div>
+    <div class="post">
+      <div class="post-header">
+        <span><span class="post-user">档案管理员</span></span>
+        <span class="post-time">2004-12-15 11:33</span>
+      </div>
+      <div class="post-body">
+        <p>我不能说太多。但我曾经处理过相关的档案。</p>
+        <p class="quote">"夜莺计划 — 集体记忆重塑实验。受试群体：247人。实验地点：H省鸦岭村。实验周期：1999年11月 - 12月。实验结果：████████。"</p>
+        <p>这就是档案里的原文。实验结果那一栏被涂黑了。</p>
+        <p style="color:var(--accent-red);">我觉得247这个数字很眼熟。查了一下——那正好是鸦岭村的全部人口。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thread 4: Survivor -->
+  <div class="thread-view" id="thread-4">
+    <button class="thread-back" onclick="backToList()">← 返回帖子列表</button>
+    <div class="post">
+      <div class="post-header">
+        <span><span class="post-user">寻找真相 <span class="user-badge badge-op">楼主</span></span></span>
+        <span class="post-time">2005-02-14 21:07</span>
+      </div>
+      <div class="post-body">
+        <strong>我表姐是鸦岭的幸存者...她说了一些事</strong>
+        <p class="mt-2">我表姐今年32岁。她一直以为自己在省城长大，有爱她的父母和平凡的童年。</p>
+        <p>直到去年，她在一次心理治疗中<span style="color:var(--accent-red);">突然开始说一种方言——一种她"从未学过"的方言</span>。</p>
+        <p>心理医生追溯了她"童年"的细节——发现全部经不起推敲。她的"小学同学"不存在。"童年照片"里的背景被证实是后期合成的。</p>
+        <p>更可怕的是——当她被催眠时，她说出了另一个名字。一个她从没听过的名字。一个鸦岭村村民的名字。</p>
+        <p>她现在在精神病院。她说每天晚上都梦到同一句话：</p>
+        <p style="text-align:center;color:var(--accent-red);font-size:1.1rem;font-weight:700;">"047号受试者，记忆植入完成。"</p>
+        <p>我表姐不叫047。但她说，在梦里，那就是她。</p>
+      </div>
+    </div>
+    <div class="post">
+      <div class="post-header">
+        <span><span class="post-user">真相追寻者</span></span>
+        <span class="post-time">2005-02-15 01:33</span>
+      </div>
+      <div class="post-body">
+        <p>047号...</p>
+        <p>我在整理资料的时候见过这个编号。<span class="hidden-link" onclick="this.style.color='var(--accent-red)';Game.addClue('subject-047-reference','047号受试者','在论坛中首次听说047号受试者。这个编号在多处出现——日记、通讯记录、论坛。047号是谁？');">它在很多地方出现过。</span></p>
+        <p>那批泄露的文件里应该有受试者名单。如果能找到的话。</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Clue panel elements -->
+<div class="clue-panel-overlay" id="cluePanelOverlay"></div>
+<div class="clue-panel" id="cluePanel">
+  <h3 style="margin-bottom:16px;font-family:var(--font-serif);">🔍 线索记录</h3>
+  <div class="progress-bar mb-2">
+    <div class="progress-fill" id="clueProgress" style="width:0%;"></div>
+  </div>
+  <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:16px;">
+    已发现: <span id="clueCount">0</span> / 12 条线索
+  </div>
+  <div id="clueList"></div>
+  <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-subtle);">
+    <button class="btn btn-small" onclick="if(confirm('确定要重置所有游戏进度吗？')){Game.reset();location.reload();}" style="width:100%;">🔄 重置进度</button>
+  </div>
+</div>
+<div class="clue-tracker">
+  <button class="clue-tracker-btn" id="clueTrackerBtn" title="查看线索记录">🔍</button>
+</div>
+<div class="status-bar">
+  <span><span class="status-dot warning"></span> 午夜真相论坛 · 缓存存档</span>
+  <span>📡 离线浏览模式</span>
+</div>
+
+<script src="../js/game.js"></script>
+<script>
+  function viewThread(id) {
+    document.getElementById('threadList').style.display = 'none';
+    document.querySelectorAll('.thread-view').forEach(v => v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function backToList() {
+    document.querySelectorAll('.thread-view').forEach(v => v.classList.remove('active'));
+    document.getElementById('threadList').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  // Add forum clues
+  if (!Game.hasClue('forum-found')) {
+    Game.addClue('forum-found', '超自然论坛', '发现了一个讨论鸦岭事件的超自然论坛。多位用户从不同角度提供了线索，包括"夜莺计划"的存在。');
+  }
+
+  // Progress updater
+  setInterval(() => {
+    const pct = Math.round((Game.cluesFound.length / 12) * 100);
+    const bar = document.getElementById('clueProgress');
+    if (bar) bar.style.width = pct + '%';
+  }, 2000);
+</script>
+
+</body>
+</html>

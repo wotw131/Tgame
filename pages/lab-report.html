@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>机密文件 — 夜莺计划</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body {
+    background: #0a0a0a;
+    background-image:
+      radial-gradient(ellipse at 50% 30%, rgba(20,0,0,0.3) 0%, transparent 70%);
+  }
+
+  .classified-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+  }
+
+  /* Password gate */
+  .password-gate {
+    max-width: 500px;
+    margin: 100px auto;
+    text-align: center;
+    padding: 40px;
+    background: #0d1117;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+  }
+
+  .password-gate .gate-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+  }
+
+  .password-gate .gate-title {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    color: #ccc;
+    margin-bottom: 8px;
+  }
+
+  .password-gate .gate-subtitle {
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 24px;
+  }
+
+  /* Classified document */
+  .classified-doc {
+    display: none;
+  }
+
+  .classified-doc.visible {
+    display: block;
+  }
+
+  .doc-cover {
+    background: #1a1a1a;
+    border: 3px solid #333;
+    padding: 50px 40px;
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .doc-cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px);
+    pointer-events: none;
+  }
+
+  .doc-cover .top-secret {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--accent-red);
+    letter-spacing: 0.3em;
+    margin-bottom: 10px;
+    text-shadow: 0 0 30px rgba(139,0,0,0.5);
+  }
+
+  .doc-cover .doc-code {
+    font-family: var(--font-mono);
+    color: #555;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+  }
+
+  .doc-cover .doc-title-official {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: #ccc;
+    margin: 20px 0;
+    letter-spacing: 0.1em;
+  }
+
+  /* Document pages */
+  .doc-page {
+    background: #f5f0e8;
+    color: #1a1a1a;
+    padding: 40px;
+    font-family: var(--font-serif);
+    line-height: 2;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    position: relative;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.4);
+  }
+
+  .doc-page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(139,0,0,0.02) 28px, rgba(139,0,0,0.02) 29px);
+    pointer-events: none;
+    border-radius: 3px;
+  }
+
+  .doc-page .page-number {
+    text-align: center;
+    font-size: 0.7rem;
+    color: #999;
+    margin-top: 20px;
+    font-family: var(--font-mono);
+  }
+
+  .doc-page .classification-mark {
+    position: absolute;
+    top: 20px; right: 30px;
+    border: 2px solid var(--accent-red);
+    color: var(--accent-red);
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    transform: rotate(10deg);
+  }
+
+  .doc-page h3 {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #333;
+  }
+
+  .doc-page table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.85rem;
+  }
+
+  .doc-page table th {
+    background: #1a1a1a;
+    color: #ddd;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.8rem;
+  }
+
+  .doc-page table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .doc-page table tr:hover td {
+    background: rgba(139,0,0,0.03);
+  }
+
+  .highlight-row {
+    background: rgba(139,0,0,0.08) !important;
+  }
+
+  .highlight-row td {
+    color: var(--accent-red) !important;
+    font-weight: 700 !important;
+  }
+
+  /* Redaction */
+  .black-bar {
+    background: #1a1a1a;
+    color: #1a1a1a;
+    padding: 0 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .black-bar:hover, .black-bar.revealed {
+    color: var(--accent-red);
+    background: transparent;
+  }
+
+  /* Scrolling text effect */
+  .important-text {
+    border-left: 4px solid var(--accent-red);
+    padding: 12px 20px;
+    margin: 16px 0;
+    background: rgba(139,0,0,0.05);
+    font-weight: 600;
+    animation: fadeIn 1s ease;
+  }
+
+  /* Warning stamp */
+  .warning-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 6rem;
+    color: rgba(139,0,0,0.04);
+    pointer-events: none;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+    z-index: 0;
+  }
+</style>
+</head>
+<body data-page="lab-report">
+
+<div class="classified-container">
+
+  <!-- Password Gate -->
+  <div class="password-gate" id="passwordGate">
+    <div class="gate-icon">🔐</div>
+    <div class="gate-title">机密文件 — 需要访问密码</div>
+    <div class="gate-subtitle">此文件已被加密。请输入访问密码以继续。</div>
+
+    <div class="input-group" style="justify-content:center;">
+      <input type="password" class="input-field" id="labPassword" placeholder="输入8位数字密码..." style="max-width:260px;text-align:center;letter-spacing:0.3em;">
+      <button class="btn btn-primary" onclick="checkPassword()">解密</button>
+    </div>
+    <div id="passwordResult" style="margin-top:12px;font-size:0.85rem;"></div>
+    <div style="margin-top:20px;font-size:0.7rem;color:#333;">
+      💡 提示：密码是鸦岭事件发生的日期。你在论坛中找到过它。
+    </div>
+  </div>
+
+  <!-- Classified Document -->
+  <div class="classified-doc" id="classifiedDoc">
+    <a href="forum.html" style="color:#555;text-decoration:none;font-size:0.8rem;font-family:var(--font-mono);">← 返回论坛</a>
+
+    <!-- Cover Page -->
+    <div class="doc-cover mt-2">
+      <div class="doc-code">PLA-MED-███-NIGHTINGALE</div>
+      <div class="top-secret">绝 密</div>
+      <div class="doc-title-official">夜莺计划 · 项目总结报告</div>
+      <div style="color:#555;font-size:0.8rem;margin-top:8px;">Project Nightingale — Final Report</div>
+      <div style="color:#555;font-size:0.7rem;margin-top:16px;font-family:var(--font-mono);">
+        提交日期：2000年3月 ██日<br>
+        项目负责人：陈██ 教授<br>
+        安全等级：最高机密 · 仅限授权人员
+      </div>
+      <div class="classified-stamp" style="position:absolute;bottom:30px;right:30px;">绝密 · TOP SECRET</div>
+    </div>
+
+    <!-- Page 1: Overview -->
+    <div class="doc-page scroll-reveal">
+      <div class="warning-watermark">绝密</div>
+      <div class="classification-mark">绝密</div>
+      <h3>第一章：项目概述</h3>
+      <p><strong>项目代号：</strong>夜莺（Nightingale）</p>
+      <p><strong>项目目标：</strong>研发大规模集体记忆重塑技术，验证在封闭群体中系统性替换原始记忆的可行性。</p>
+      <p><strong>实验地点：</strong>H省S市鸦岭村（代号：鸦岭站点）</p>
+      <p><strong>受试群体：</strong>鸦岭村全体居民，共<span class="black-bar" onclick="this.classList.toggle('revealed')">247</span>人。</p>
+      <p><strong>实验周期：</strong>1999年11月2日 — 12月31日（共60天）</p>
+
+      <div class="important-text">
+        ⚠️ 项目背景：在经历了长达两年的动物实验和孤立人体试验后，夜莺计划进入第三阶段——<strong>封闭群体大规模测试</strong>。鸦岭村因其地理隔绝性和人口结构稳定性被选为测试场地。
+      </div>
+
+      <p><strong>实验方法：</strong></p>
+      <p>通过长期微量药物投递（伪装为"维生素补充"）结合夜间音频诱导，逐步削弱受试者的原始记忆，并植入虚构的新身份记忆。目标是在60天内完成247名受试者的<strong>完整记忆置换</strong>。</p>
+
+      <p><strong>药物代号：</strong><span class="text-mono">NGL-7</span>（夜莺-7号化合物）</p>
+      <p>一种合成神经肽，可暂时抑制海马体中与长期记忆巩固相关的蛋白质合成。与特定频率的音频诱导配合使用，可在受试者大脑中建立新的神经网络连接。</p>
+
+      <div class="page-number">— 1 —</div>
+    </div>
+
+    <!-- Page 2: Subject Data -->
+    <div class="doc-page scroll-reveal">
+      <div class="warning-watermark">绝密</div>
+      <div class="classification-mark">绝密</div>
+      <h3>第二章：受试者数据（部分）</h3>
+      <p style="font-size:0.85rem;">以下为247名受试者中的代表性样本。完整名单见附录A。</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>植入身份</th>
+            <th>植入成功率</th>
+            <th>状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>YN-001</td>
+            <td>刘建国</td>
+            <td>52</td>
+            <td>退休工厂工人 · 省城</td>
+            <td>78%</td>
+            <td>转移 · A-3安置点</td>
+          </tr>
+          <tr>
+            <td>YN-023</td>
+            <td>李秀兰</td>
+            <td>38</td>
+            <td>小学教师 · 市区</td>
+            <td>91%</td>
+            <td>转移 · B-7安置点</td>
+          </tr>
+          <tr>
+            <td>YN-047</td>
+            <td>林██</td>
+            <td>7</td>
+            <td>城市学生 · 省城家庭</td>
+            <td class="highlight-row" style="color:var(--accent-red) !important;">99.7%</td>
+            <td>转移 · A-1安置点 · 长期观察</td>
+          </tr>
+          <tr>
+            <td>YN-089</td>
+            <td>张伟</td>
+            <td>34</td>
+            <td>个体商户 · 邻市</td>
+            <td>42%</td>
+            <td style="color:var(--accent-red);">抵抗 · 已处理</td>
+          </tr>
+          <tr>
+            <td>YN-112</td>
+            <td>王秀英</td>
+            <td>65</td>
+            <td>退休护士 · 省城</td>
+            <td>83%</td>
+            <td>转移 · C-2安置点</td>
+          </tr>
+          <tr>
+            <td>YN-156</td>
+            <td>陈大勇</td>
+            <td>41</td>
+            <td>建筑工人 · 沿海</td>
+            <td>67%</td>
+            <td>转移 · B-3安置点</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="important-text">
+        <p>⚠️ <strong>特别标注：</strong>YN-047（林██，7岁，女性）表现出最高的植入接受率（99.7%）。受试者完全接受了虚构身份——"林夏，在省城长大的独生女"。原始记忆几乎完全被覆盖。此案例被标记为"<strong>参照样本</strong>"，建议进行长期追踪观察。</p>
+        <p style="font-size:0.8rem;color:#666;">注：YN-047的原始身份信息已从所有非机密记录中删除。植入记忆中的"父母"由项目人员扮演。</p>
+      </div>
+
+      <div class="page-number">— 2 —</div>
+    </div>
+
+    <!-- Page 3: Incident Report -->
+    <div class="doc-page scroll-reveal">
+      <div class="warning-watermark">绝密</div>
+      <div class="classification-mark">绝密</div>
+      <h3>第三章：事件报告 · 1999年12月31日</h3>
+
+      <p><strong>事件概述：</strong></p>
+      <p>1999年12月30日晚22:00，6名受试者（YN-089张伟及其5名同伙）发起了有组织的<span class="black-bar" onclick="this.classList.toggle('revealed')">抵抗行动</span>。他们已秘密停止服药数周，并恢复了部分原始记忆。当晚，他们在村卫生所地下室放火试图<span class="black-bar" onclick="this.classList.toggle('revealed')">破坏实验设备</span>。</p>
+
+      <div class="important-text">
+        <p>⛔ <strong>事件处理：</strong></p>
+        <p>1. 6名抵抗者被迅速控制。经项目指挥层决定，予以<span class="black-bar" onclick="this.classList.toggle('revealed')">终止</span>。</p>
+        <p>2. 为掩盖实验痕迹，工程部队在村北山坡实施了<span class="black-bar" onclick="this.classList.toggle('revealed')">控制爆破</span>，制造了"山体滑坡"的假象。</p>
+        <p>3. 241名存活受试者于2000年1月1日凌晨被分17辆运输车转移至全国各安置点。</p>
+        <p>4. 鸦岭村被正式从地图和行政记录中<span class="black-bar" onclick="this.classList.toggle('revealed')">删除</span>。</p>
+      </div>
+
+      <p><strong>后续安排：</strong></p>
+      <p>所有受试者获得全新的合法身份文件。安置点选在全国17个城市。每个安置点配备2名"项目联络人"，负责长期监控受试者的记忆稳定性并定期汇报。</p>
+
+      <p style="text-align:center;color:var(--accent-red);font-size:1rem;font-weight:700;margin-top:20px;">
+        ██ 项目状态：第二阶段已启动 ██
+      </p>
+
+      <div class="page-number">— 3 —</div>
+    </div>
+
+    <!-- Page 4: Conclusion -->
+    <div class="doc-page scroll-reveal">
+      <div class="warning-watermark">绝密</div>
+      <div class="classification-mark">绝密</div>
+      <h3>第四章：结论与建议</h3>
+
+      <p><strong>实验结论：</strong></p>
+      <p>夜莺计划验证了大规模集体记忆重塑的<span class="black-bar" onclick="this.classList.toggle('revealed')">可行性</span>。247名受试者中，241人成功接受并维持了植入记忆（成功率97.6%）。</p>
+
+      <p><strong>关键发现：</strong></p>
+      <p>• NGL-7化合物与音频诱导的结合方案有效。</p>
+      <p>• 年龄越小，植入成功率越高。YN-047（7岁）的99.7%成功率验证了此假设。</p>
+      <p>• <span class="black-bar" onclick="this.classList.toggle('revealed')">植入记忆在受试者成年后仍保持稳定</span>。</p>
+      <p>• 有证据表明，即使植入记忆完全覆盖原始记忆，在某些特定触发条件下（如催眠、创伤性事件），原始记忆的碎片仍可能<span class="black-bar" onclick="this.classList.toggle('revealed')">渗出</span>。</p>
+
+      <div class="important-text" style="font-size:1rem;">
+        <p>🔴 <strong>最终建议：</strong></p>
+        <p><strong>继续对所有241名受试者进行长期监控。</strong></p>
+        <p>特别是YN-047——鉴于其作为"最佳参照样本"的价值，建议：
+          <br>• 维持A-1安置点的监控配置
+          <br>• 每季度进行一次记忆稳定性评估
+          <br>• <strong>如受试者出现记忆恢复迹象，立即启动"重置协议"</strong>
+        </p>
+      </div>
+
+      <p style="text-align:right;color:#555;font-size:0.8rem;">项目负责人签名：<span style="font-family:cursive;">陈██</span></p>
+      <p style="text-align:right;color:#555;font-size:0.7rem;">2000年3月20日</p>
+
+      <div class="page-number">— 4 —</div>
+    </div>
+
+    <!-- Navigation to patient file -->
+    <div style="text-align:center;padding:30px;background:#0d1117;border:1px solid #1a1a1a;border-radius:4px;margin-top:20px;">
+      <p style="color:#555;font-size:0.85rem;margin-bottom:8px;">
+        📋 受试者YN-047的详细档案被单独存储。
+      </p>
+      <p style="color:#333;font-size:0.75rem;margin-bottom:16px;">
+        访问受试者YN-047完整档案需要输入其编号：<span style="font-family:var(--font-mono);">SUBJECT-047</span>
+      </p>
+      <a href="patient-file.html" class="btn btn-primary">查看受试者 YN-047 档案 →</a>
+    </div>
+  </div>
+</div>
+
+<!-- Clue panel elements -->
+<div class="clue-panel-overlay" id="cluePanelOverlay"></div>
+<div class="clue-panel" id="cluePanel">
+  <h3 style="margin-bottom:16px;font-family:var(--font-serif);">🔍 线索记录</h3>
+  <div class="progress-bar mb-2">
+    <div class="progress-fill" id="clueProgress" style="width:0%;"></div>
+  </div>
+  <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:16px;">
+    已发现: <span id="clueCount">0</span> / 12 条线索
+  </div>
+  <div id="clueList"></div>
+  <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-subtle);">
+    <button class="btn btn-small" onclick="if(confirm('确定要重置所有游戏进度吗？')){Game.reset();location.reload();}" style="width:100%;">🔄 重置进度</button>
+  </div>
+</div>
+<div class="clue-tracker">
+  <button class="clue-tracker-btn" id="clueTrackerBtn" title="查看线索记录">🔍</button>
+</div>
+<div class="status-bar">
+  <span><span class="status-dot warning"></span> 机密文档 · 离线查看</span>
+  <span>🔴 此文档不应被公开</span>
+</div>
+
+<script src="../js/game.js"></script>
+<script>
+  function checkPassword() {
+    const input = document.getElementById('labPassword');
+    const result = document.getElementById('passwordResult');
+
+    if (input.value.trim() === '19991231') {
+      result.innerHTML = '<span style="color:#00cc00;">✓ 密码正确。正在解密文件...</span>';
+      Game.addClue('lab-report-found', '夜莺计划实验报告', '获取了夜莺计划的完整报告。247名村民被用作记忆植入实验。YN-047号受试者——一个7岁女孩——表现出最高植入成功率。');
+      Game.unlock('lab-report');
+      setTimeout(() => {
+        document.getElementById('passwordGate').style.display = 'none';
+        document.getElementById('classifiedDoc').classList.add('visible');
+        window.scrollTo(0, 0);
+      }, 1500);
+    } else if (input.value.trim().length > 0) {
+      result.innerHTML = '<span style="color:var(--accent-red);">✗ 密码错误。提示：鸦岭事件发生的日期——年月日连在一起，8位数字。</span>';
+    }
+  }
+
+  // If already unlocked in this session
+  if (Game.isUnlocked('lab-report')) {
+    document.getElementById('passwordGate').style.display = 'none';
+    document.getElementById('classifiedDoc').classList.add('visible');
+  }
+
+  // Progress updater
+  setInterval(() => {
+    const pct = Math.round((Game.cluesFound.length / 12) * 100);
+    const bar = document.getElementById('clueProgress');
+    if (bar) bar.style.width = pct + '%';
+  }, 2000);
+</script>
+
+</body>
+</html>

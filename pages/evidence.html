@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>证据保险库 — EX-档案</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body {
+    background: #0a0a0a;
+    background-image:
+      radial-gradient(ellipse at 50% 0%, rgba(30,30,30,0.5) 0%, transparent 70%);
+  }
+
+  .vault-header {
+    background: #111;
+    border-bottom: 2px solid #2a2a2a;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .vault-header .vault-title {
+    color: var(--accent-amber);
+    letter-spacing: 0.1em;
+  }
+
+  .evidence-container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+  }
+
+  .ev-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #555;
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+  }
+
+  .ev-back:hover { color: #ccc; }
+
+  /* Evidence Tabs */
+  .ev-tabs {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .ev-tab {
+    padding: 10px 20px;
+    background: #111;
+    border: 1px solid #222;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #666;
+    transition: all 0.2s;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .ev-tab:hover { color: #aaa; border-color: #333; }
+  .ev-tab.active {
+    color: var(--accent-red);
+    border-color: var(--accent-red);
+    background: #1a1a1a;
+    border-bottom-color: #1a1a1a;
+  }
+
+  /* Tab content */
+  .ev-content {
+    display: none;
+    background: #111;
+    border: 1px solid #222;
+    padding: 28px;
+    border-radius: 0 4px 4px 4px;
+    min-height: 400px;
+  }
+
+  .ev-content.active { display: block; }
+
+  /* Photo evidence card */
+  .photo-evidence {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  .photo-card-ev {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 3px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .photo-card-ev:hover {
+    border-color: var(--accent-red);
+    transform: scale(1.03);
+    z-index: 10;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  }
+
+  .photo-card-ev .img-box {
+    height: 130px;
+    background: #050505;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #1a1a1a;
+    position: relative;
+  }
+
+  .photo-card-ev .img-caption {
+    padding: 8px 12px;
+    font-size: 0.7rem;
+    color: #555;
+    font-family: var(--font-mono);
+  }
+
+  /* Document viewer in evidence */
+  .doc-preview {
+    background: #f5f0e8;
+    color: #2a2a2a;
+    padding: 30px;
+    font-family: var(--font-serif);
+    line-height: 2;
+    border-radius: 3px;
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .doc-preview::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(139,0,0,0.02) 28px, rgba(139,0,0,0.02) 29px);
+    pointer-events: none;
+  }
+
+  .doc-preview .handwritten {
+    font-family: '楷体', 'KaiTi', var(--font-serif);
+    color: #1a3a5c;
+    font-size: 1rem;
+  }
+
+  /* Audio transcript */
+  .transcript {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    padding: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.9;
+    color: #888;
+  }
+
+  .transcript .speaker {
+    color: #4a9eff;
+    font-weight: 700;
+  }
+
+  .transcript .timestamp {
+    color: #444;
+    font-size: 0.7rem;
+  }
+
+  .transcript .redacted-line {
+    color: #1a1a1a;
+    background: #1a1a1a;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  .transcript .redacted-line:hover {
+    color: var(--accent-red);
+  }
+
+  /* Locked evidence */
+  .locked-evidence {
+    text-align: center;
+    padding: 60px 20px;
+    color: #333;
+  }
+
+  .locked-evidence .lock-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+  }
+
+  /* Interactive diary fragment */
+  .diary-fragment {
+    position: relative;
+  }
+
+  .diary-page {
+    background: #f5f0e8;
+    color: #2a2a2a;
+    padding: 30px;
+    font-family: '楷体', 'KaiTi', var(--font-serif);
+    line-height: 2.2;
+    border-radius: 3px;
+    font-size: 1rem;
+    border: 1px solid #d5d0c8;
+    position: relative;
+  }
+
+  .diary-page .torn-edge {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 20px;
+    background: linear-gradient(135deg, transparent 25%, #f5f0e8 25%, #f5f0e8 50%, transparent 50%, transparent 75%, #f5f0e8 75%);
+    background-size: 20px 20px;
+  }
+
+  .diary-page .emphasis {
+    color: #8b0000;
+    border-bottom: 2px solid #8b0000;
+    font-weight: 700;
+  }
+
+  /* Photo modal */
+  .photo-modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .photo-modal-content {
+    max-width: 85vw;
+    max-height: 85vh;
+    text-align: center;
+  }
+
+  .photo-modal-close {
+    position: absolute;
+    top: 20px; right: 30px;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  /* Blood-stain text */
+  .blood-text {
+    color: #8b0000;
+    font-weight: 700;
+    text-shadow: 0 0 2px rgba(139,0,0,0.5);
+    animation: bloodPulse 3s ease infinite;
+  }
+
+  @keyframes bloodPulse {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+  }
+</style>
+</head>
+<body data-page="evidence">
+
+<div class="vault-header">
+  <span class="vault-title">🔒 证据保险库 · CR-1999-247</span>
+  <span style="color:#555;">安全等级：<span style="color:var(--accent-red);">机密</span></span>
+</div>
+
+<div class="evidence-container">
+  <a href="case-file.html" class="ev-back">← 返回案件档案</a>
+
+  <!-- Tabs -->
+  <div class="ev-tabs">
+    <div class="ev-tab active" onclick="switchTab('photos')">📷 现场照片</div>
+    <div class="ev-tab" onclick="switchTab('diary')">📔 日记残片</div>
+    <div class="ev-tab" onclick="switchTab('transcript')">🎙️ 录音转录</div>
+    <div class="ev-tab" onclick="switchTab('report')">📋 勘查报告</div>
+  </div>
+
+  <!-- Tab: Photos -->
+  <div class="ev-content active" id="tab-photos">
+    <h3 style="margin-bottom:16px;color:#aaa;">现场照片 (2000年1月3日 · 搜救队拍摄)</h3>
+    <div class="photo-evidence">
+      <div class="photo-card-ev" onclick="openPhoto('village-entrance')">
+        <div class="img-box">
+          <svg viewBox="0 0 100 70" width="100%"><rect width="100" height="70" fill="#1a1a1a"/><rect x="10" y="20" width="80" height="3" fill="#333"/><rect x="15" y="30" width="15" height="25" fill="#222"/><rect x="40" y="25" width="20" height="30" fill="#222"/><rect x="70" y="28" width="15" height="27" fill="#222"/><text x="50" y="60" text-anchor="middle" fill="#444" font-size="8">村口</text></svg>
+        </div>
+        <div class="img-caption">PHOTO-001 · 鸦岭村村口</div>
+      </div>
+      <div class="photo-card-ev" onclick="openPhoto('empty-house')">
+        <div class="img-box">
+          <svg viewBox="0 0 100 70" width="100%"><rect width="100" height="70" fill="#1a1a1a"/><rect x="25" y="15" width="50" height="40" fill="#222"/><rect x="35" y="25" width="8" height="12" fill="#1a1a1a"/><rect x="55" y="25" width="8" height="12" fill="#1a1a1a"/><rect x="42" y="40" width="16" height="15" fill="#1a1a1a"/></svg>
+        </div>
+        <div class="img-caption">PHOTO-002 · 空无一人的民宅</div>
+      </div>
+      <div class="photo-card-ev" onclick="openPhoto('table-setting')">
+        <div class="img-box" style="position:relative;">
+          <svg viewBox="0 0 100 70" width="100%"><rect width="100" height="70" fill="#1a1a1a"/><rect x="20" y="40" width="60" height="4" fill="#333"/><circle cx="35" cy="35" r="4" fill="#2a2a2a"/><circle cx="50" cy="33" r="4" fill="#2a2a2a"/><circle cx="65" cy="35" r="4" fill="#2a2a2a"/></svg>
+          <span style="position:absolute;top:8px;right:8px;background:var(--accent-red);color:#fff;font-size:0.55rem;padding:2px 4px;border-radius:2px;">关键</span>
+        </div>
+        <div class="img-caption">PHOTO-003 · 摆着饭菜的餐桌</div>
+      </div>
+      <div class="photo-card-ev" onclick="openPhoto('clinic')">
+        <div class="img-box">
+          <svg viewBox="0 0 100 70" width="100%"><rect width="100" height="70" fill="#1a1a1a"/><rect x="30" y="10" width="40" height="50" fill="#222"/><text x="50" y="42" text-anchor="middle" fill="#fff" font-size="12">+</text></svg>
+        </div>
+        <div class="img-caption">PHOTO-004 · 村卫生所</div>
+      </div>
+      <div class="photo-card-ev" onclick="openPhoto('truck-tracks')">
+        <div class="img-box" style="position:relative;">
+          <svg viewBox="0 0 100 70" width="100%"><rect width="100" height="70" fill="#1a1a1a"/><rect x="0" y="45" width="100" height="5" fill="#222"/><rect x="10" y="42" width="8" height="3" fill="#2a2a2a"/><rect x="30" y="42" width="8" height="3" fill="#2a2a2a"/><rect x="55" y="42" width="8" height="3" fill="#2a2a2a"/><rect x="80" y="42" width="8" height="3" fill="#2a2a2a"/></svg>
+          <span style="position:absolute;top:8px;right:8px;background:var(--accent-red);color:#fff;font-size:0.55rem;padding:2px 4px;border-radius:2px;">关键</span>
+        </div>
+        <div class="img-caption">PHOTO-005 · 卡车轮胎印</div>
+      </div>
+      <div class="photo-card-ev">
+        <div class="img-box" style="opacity:0.3;">🔒</div>
+        <div class="img-caption">PHOTO-006 · [已损坏]</div>
+      </div>
+    </div>
+    <button class="btn btn-small mt-3" onclick="Game.addClue('crime-scene-photos','现场照片','餐桌摆着未动的年夜饭，卡车轮胎印指向村外——没有山体滑坡的痕迹。这不是自然灾害。');this.textContent='✓ 线索已记录';this.disabled=true;">记录此发现</button>
+  </div>
+
+  <!-- Tab: Diary -->
+  <div class="ev-content" id="tab-diary">
+    <h3 style="margin-bottom:16px;color:#aaa;">EX-002 · 村民张伟的日记残片</h3>
+    <p style="font-size:0.8rem;color:#555;margin-bottom:20px;">在村民张伟家中发现，日记本大部分页面被撕毁。仅余以下片段。</p>
+
+    <div class="diary-page">
+      <p style="text-align:center;font-size:1.2rem;font-weight:700;margin-bottom:20px;">张伟的日记</p>
+
+      <p><strong>1999年11月3日</strong></p>
+      <p>今天村里来了几个穿白大褂的人，说是省里的医疗队，来给大家做免费体检。阿芳说他们很专业，但我总觉得哪里不对劲。他们抽了血，还给每个人发了一个编号。</p>
+      <p>我的编号是<span class="emphasis">YN-089</span>。</p>
+
+      <p class="mt-2"><strong>1999年11月15日</strong></p>
+      <p>体检已经持续快两周了。他们不只是抽血，还让我们吃药。白色的药片，每天两次。说是"维生素补充剂"。村长让大家配合，说是上面的任务。</p>
+      <p>吃了药之后，我开始做梦。非常真实的梦。<span class="emphasis">梦里我是一个完全不同的人——一个在城市长大的孩子，从来没见过鸦岭。</span></p>
+
+      <p class="mt-2"><strong>1999年12月8日</strong></p>
+      <p>梦越来越清晰了。昨天我醒来的时候，有那么几分钟，我真的以为自己是"张明"——那个梦里的城市孩子。我看着镜子，觉得自己很陌生。</p>
+      <p>我跟阿芳说了，她说她也有同样的感觉。她说她梦里叫"李华"，在省城读大学。</p>
+      <p><span class="emphasis">不对劲。非常不对劲。</span></p>
+
+      <p class="mt-2"><strong>1999年12月20日</strong></p>
+      <p>我偷偷停了药。我把药片藏起来，假装吃下去。三天后，梦开始消退，但那种"我是另一个人"的感觉却没有消失。</p>
+      <p>更可怕的是——我开始分不清哪些记忆是真的。<span class="emphasis">我小时候和弟弟在河边抓鱼——那个记忆是真的吗？还是被塞进我脑子里的？</span></p>
+
+      <p class="mt-2"><strong>1999年12月27日</strong></p>
+      <p>我今天看到他们把一些村民单独带走。说是"深度检查"。被带走的人回来后...不太一样了。老刘回来后，<span class="emphasis">连自己的名字都想不起来了</span>。他只记得自己"应该叫刘建国，在工厂上班"。</p>
+      <p>可老刘一辈子都是农民啊。他从来没进过工厂。</p>
+
+      <p class="mt-2"><strong>1999年12月30日</strong></p>
+      <p class="blood-text">他们发现了。他们知道有人没吃药。</p>
+      <p>今天来了<span class="emphasis">卡车</span>。军绿色的卡车，停在村口。不是医疗队的车。是军车。</p>
+      <p>村长说今晚有"最后的集体检查"。所有人必须参加。在村卫生所。</p>
+      <p>我得把日记藏起来。如果有人找到这个——<span class="emphasis">离开这里。不要相信你的记忆。</span></p>
+      <p>项目叫<span class="emphasis">"夜莺"</span>。他们在做一个实验。</p>
+      <p style="color:#8b0000;font-size:1.1rem;font-weight:700;">他们在替换我们的记忆。</p>
+
+      <div class="torn-edge"></div>
+    </div>
+
+    <button class="btn btn-small mt-3" onclick="Game.addClue('diary-zhangwei','张伟的日记','军方在鸦岭村进行代号"夜莺"的记忆替换实验。村民被给予虚假记忆。集体失踪前一晚，军车到达。');this.textContent='✓ 线索已记录';this.disabled=true;">记录此发现</button>
+
+    <div style="margin-top:20px;padding:16px;background:#111;border-left:3px solid var(--accent-amber);font-size:0.85rem;color:#888;">
+      <p>💡 <strong>注意：</strong>日记中频繁提到"夜莺"。张伟的编号是YN-089。"最后的检查"地点在<span style="color:var(--accent-amber);">村卫生所</span>。</p>
+      <p style="margin-top:8px;">📎 日记中提到一个网络论坛——张伟曾试图在上面求助。论坛地址被涂改，但仍可辨认出部分：<span style="font-family:var(--font-mono);color:var(--accent-amber);">bbs.██████.com/鸦岭</span></p>
+    </div>
+  </div>
+
+  <!-- Tab: Transcript -->
+  <div class="ev-content" id="tab-transcript">
+    <h3 style="margin-bottom:16px;color:#aaa;">EX-003 · 截获通讯录音 — 转录文本</h3>
+    <p style="font-size:0.8rem;color:var(--accent-red);margin-bottom:20px;">⚠️ 此录音由王建国通过非正规渠道获取。原始音频已损坏。以下为部分转录。</p>
+
+    <div class="transcript">
+      <p><span class="timestamp">[00:00:00]</span> <span class="speaker">未知男声A：</span>...鸦岭的清理已经完成了。所有受试者已转移。</p>
+      <p><span class="timestamp">[00:00:12]</span> <span class="speaker">未知男声B：</span>247个全部？</p>
+      <p><span class="timestamp">[00:00:15]</span> <span class="speaker">A：</span>241个。有6个...<span class="redacted-line" onclick="this.style.color='var(--accent-red)';this.style.background='transparent';">出现了抵抗。已经处理了。</span></p>
+      <p><span class="timestamp">[00:00:22]</span> <span class="speaker">B：</span>处理方式？</p>
+      <p><span class="timestamp">[00:00:24]</span> <span class="speaker">A：</span>与滑坡报告一致。<span class="redacted-line" onclick="this.style.color='var(--accent-red)';this.style.background='transparent';">我们制造了滑坡。</span></p>
+      <p><span class="timestamp">[00:00:31]</span> <span class="speaker">B：</span>受试者现在在哪？</p>
+      <p><span class="timestamp">[00:00:33]</span> <span class="speaker">A：</span>分散在全国17个安置点。新的身份已经建立。第<span class="redacted-line" onclick="this.style.color='var(--accent-red)';this.style.background='transparent';">047</span>号受试者表现最好——完全接受了新记忆。可以作为后续研究的参照。</p>
+      <p><span class="timestamp">[00:00:45]</span> <span class="speaker">B：</span>夜莺的第二阶段准备好了吗？</p>
+      <p><span class="timestamp">[00:00:47]</span> <span class="speaker">A：</span>准备好了。我们已经开始在<span class="redacted-line" onclick="this.style.color='var(--accent-red)';this.style.background='transparent';">更大范围</span>测试。</p>
+      <p><span class="timestamp">[00:00:52]</span> <span class="speaker">B：</span>王建国怎么办？他在查这个案子。</p>
+      <p><span class="timestamp">[00:00:55]</span> <span class="speaker">A：</span><span class="redacted-line" onclick="this.style.color='var(--accent-red)';this.style.background='transparent';">已经在处理了。他不会成为问题。</span></p>
+      <p><span class="timestamp">[00:01:02]</span> <span style="color:#444;">[余下部分已损坏]</span></p>
+    </div>
+
+    <button class="btn btn-small mt-3" onclick="Game.addClue('military-comms','截获通讯','军方通讯证实鸦岭事件是记忆实验。"滑坡"是人为制造的。241名幸存者被分散安置。提及"047号受试者"。');this.textContent='✓ 线索已记录';this.disabled=true;">记录此发现</button>
+  </div>
+
+  <!-- Tab: Investigation Report -->
+  <div class="ev-content" id="tab-report">
+    <h3 style="margin-bottom:16px;color:#aaa;">EX-005 · 现场勘查报告（王建国）</h3>
+    <div class="doc-preview">
+      <p style="text-align:center;font-size:1.1rem;font-weight:700;">鸦岭村现场勘查报告</p>
+      <p style="text-align:center;font-size:0.8rem;">调查人：王建国 · 2003年9月15日</p>
+      <hr style="border-color:#ccc;margin:12px 0;">
+      <p>经实地勘查，得出以下结论：</p>
+      <p>1. 鸦岭村所在地<span style="font-weight:700;">不存在山体滑坡地质痕迹</span>。周边山体完好，无滑坡堆积物。</p>
+      <p>2. 村内建筑基本完好。多数民宅内的生活用品未被带走，显示居民是<span style="font-weight:700;">突然离开</span>。</p>
+      <p>3. 在村卫生所后方发现一处<span style="font-weight:700;">被填埋的地下室入口</span>。从外部观察，地下室规模远超普通村卫生所需求。</p>
+      <p>4. 村口道路发现<span style="font-weight:700;">重型车辆轮胎印</span>，与军用卡车轮胎花纹吻合。</p>
+      <p>5. 在若干民宅中提取到含有<span style="font-weight:700;">不明化学残留物</span>的药瓶。已送检。（注：送检结果被标注为"丢失"）</p>
+      <p style="font-weight:700;color:#8b0000;">结论：鸦岭村247名村民的失踪系人为事件。建议立即展开刑事调查，并追查代号"夜莺"的相关方。</p>
+      <p style="font-size:0.7rem;color:#666;">[此报告于2004年6月被标记为"不予采纳"。原始副本由王建国私下保存。]</p>
+    </div>
+    <button class="btn btn-small mt-2" onclick="Game.addClue('investigation-report','王建国勘查报告','王建国在现场发现地下室入口、军用轮胎印和不明药物。报告结论为人为事件，但被上级驳回。');this.textContent='✓ 线索已记录';this.disabled=true;">记录此发现</button>
+  </div>
+
+  <!-- Hidden link to forum -->
+  <div style="margin-top:30px;padding:20px;background:#0d1117;border:1px solid #1a2a35;border-radius:4px;text-align:center;">
+    <p style="font-size:0.8rem;color:#444;margin-bottom:8px;">
+      📡 在张伟的日记中提到了一个网址...仔细看日记的最后几行。
+    </p>
+    <p style="font-size:0.75rem;color:#333;">
+      提示：日记底部被涂改的论坛地址。完整地址是 <span style="color:#222;">bbs.crowridge-truth.com/鸦岭</span>
+    </p>
+    <a href="forum.html" class="btn btn-primary btn-small">访问论坛存档 →</a>
+  </div>
+</div>
+
+<!-- Clue panel elements -->
+<div class="clue-panel-overlay" id="cluePanelOverlay"></div>
+<div class="clue-panel" id="cluePanel">
+  <h3 style="margin-bottom:16px;font-family:var(--font-serif);">🔍 线索记录</h3>
+  <div class="progress-bar mb-2">
+    <div class="progress-fill" id="clueProgress" style="width:0%;"></div>
+  </div>
+  <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:16px;">
+    已发现: <span id="clueCount">0</span> / 12 条线索
+  </div>
+  <div id="clueList"></div>
+  <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-subtle);">
+    <button class="btn btn-small" onclick="if(confirm('确定要重置所有游戏进度吗？')){Game.reset();location.reload();}" style="width:100%;">🔄 重置进度</button>
+  </div>
+</div>
+<div class="clue-tracker">
+  <button class="clue-tracker-btn" id="clueTrackerBtn" title="查看线索记录">🔍</button>
+</div>
+<div class="status-bar">
+  <span><span class="status-dot warning"></span> 证据保险库 · 安全连接</span>
+  <span>📁 CR-1999-247-EX</span>
+</div>
+
+<script src="../js/game.js"></script>
+<script>
+  function switchTab(tab) {
+    document.querySelectorAll('.ev-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.ev-content').forEach(c => c.classList.remove('active'));
+    document.querySelector(`.ev-tab[onclick*="${tab}"]`).classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+
+  function openPhoto(id) {
+    const titles = {
+      'village-entrance': '鸦岭村村口 — 空无一人，建筑完好',
+      'empty-house': '民宅内部 — 生活用品完整，居民突然离开',
+      'table-setting': '摆着年夜饭的餐桌 — 饭菜未动，筷子整齐摆放',
+      'clinic': '村卫生所 — 后方发现被填埋的地下室入口',
+      'truck-tracks': '重型车辆轮胎印 — 与军用卡车吻合'
+    };
+    const modal = document.createElement('div');
+    modal.className = 'photo-modal';
+    modal.innerHTML = `
+      <button class="photo-modal-close" onclick="this.parentElement.remove()">✕</button>
+      <div class="photo-modal-content">
+        <div style="font-size:6rem;margin-bottom:16px;">📷</div>
+        <p style="color:#ccc;font-family:var(--font-mono);">${titles[id] || id}</p>
+        <p style="color:#555;font-size:0.8rem;margin-top:8px;">[图像已从原始数据库中恢复]</p>
+      </div>
+    `;
+    modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
+    document.body.appendChild(modal);
+  }
+
+  // Progress updater
+  setInterval(() => {
+    const pct = Math.round((Game.cluesFound.length / 12) * 100);
+    const bar = document.getElementById('clueProgress');
+    if (bar) bar.style.width = pct + '%';
+  }, 2000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>冷案数据库 — CR-1999-247</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body {
+    background: #0a0a0a;
+  }
+
+  /* Police database header */
+  .db-header {
+    background: #0d1117;
+    border-bottom: 2px solid #1a3a4a;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .db-header .db-logo {
+    color: #4a9eff;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .db-header .db-user {
+    color: #666;
+  }
+
+  .db-header .db-status {
+    color: #00cc00;
+    font-size: 0.7rem;
+  }
+
+  /* Case container */
+  .case-container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+  }
+
+  /* Case header card */
+  .case-header-card {
+    background: linear-gradient(135deg, #0d1117 0%, #111820 100%);
+    border: 1px solid #1a3a4a;
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .case-header-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(139,0,0,0.05));
+    pointer-events: none;
+  }
+
+  .case-number {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: #4a9eff;
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+  }
+
+  .case-title-big {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .case-subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    font-family: var(--font-mono);
+    margin-bottom: 16px;
+  }
+
+  .case-status-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border: 1px solid var(--accent-red);
+    color: var(--accent-red);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    border-radius: 2px;
+  }
+
+  /* Info grid */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .info-grid .info-cell {
+    background: #0d1117;
+    padding: 14px 18px;
+  }
+
+  .info-grid .info-label {
+    font-size: 0.7rem;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .info-grid .info-value {
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+
+  /* Section panels */
+  .section-panel {
+    background: #0d1117;
+    border: 1px solid #1a2a35;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .section-header {
+    background: #111820;
+    padding: 14px 20px;
+    border-bottom: 1px solid #1a2a35;
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: #ddd;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+  }
+
+  .section-header:hover {
+    background: #151d28;
+  }
+
+  .section-header .expand-icon {
+    transition: transform 0.3s;
+    color: #555;
+  }
+
+  .section-header.open .expand-icon {
+    transform: rotate(90deg);
+  }
+
+  .section-body {
+    padding: 20px;
+    display: none;
+    font-size: 0.9rem;
+    line-height: 1.9;
+    color: #aaa;
+  }
+
+  .section-body.open {
+    display: block;
+  }
+
+  /* Evidence list */
+  .evidence-list {
+    list-style: none;
+  }
+
+  .evidence-list li {
+    padding: 10px 14px;
+    border-bottom: 1px solid #151d28;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+
+  .evidence-list li:hover {
+    background: #151d28;
+  }
+
+  .evidence-list li .ev-id {
+    color: #4a9eff;
+    min-width: 80px;
+  }
+
+  .evidence-list li .ev-status {
+    margin-left: auto;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  .ev-status.classified {
+    background: rgba(139,0,0,0.2);
+    color: var(--accent-red);
+    border: 1px solid rgba(139,0,0,0.3);
+  }
+
+  .ev-status.available {
+    background: rgba(0,204,0,0.1);
+    color: #00cc00;
+    border: 1px solid rgba(0,204,0,0.2);
+  }
+
+  /* Note from Wang */
+  .investigator-note {
+    background: #111820;
+    border-left: 3px solid var(--accent-amber);
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-style: italic;
+    color: #b0a080;
+    font-size: 0.88rem;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .investigator-note .note-author {
+    font-style: normal;
+    color: #666;
+    font-size: 0.75rem;
+    margin-top: 8px;
+  }
+
+  /* Code entry area */
+  .code-area {
+    background: #0a0f14;
+    border: 1px dashed #333;
+    padding: 20px;
+    border-radius: 4px;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .code-area .code-hint {
+    font-size: 0.78rem;
+    color: #555;
+    margin-bottom: 12px;
+  }
+
+  /* Hidden clue reveal */
+  .hidden-clue {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    color: #1a1a1a;
+    background: #1a1a1a;
+    padding: 0 4px;
+    border-radius: 2px;
+    transition: all 0.5s ease;
+  }
+
+  .hidden-clue:hover, .hidden-clue.revealed {
+    color: var(--accent-red);
+    background: transparent;
+  }
+
+  /* Satellite comparison */
+  .satellite-compare {
+    display: flex;
+    gap: 16px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+
+  .satellite-img {
+    flex: 1;
+    min-width: 200px;
+    background: #0a0f14;
+    border: 1px solid #1a2a35;
+    padding: 16px;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .satellite-img .img-placeholder {
+    width: 100%;
+    height: 160px;
+    background: #050a10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #1a2a35;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .satellite-img .img-label {
+    font-size: 0.75rem;
+    color: #555;
+    font-family: var(--font-mono);
+  }
+
+  /* Anomaly pulse */
+  .anomaly-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--accent-red);
+    border-radius: 50%;
+    animation: anomalyPulse 2s ease infinite;
+  }
+
+  @keyframes anomalyPulse {
+    0%, 100% { box-shadow: 0 0 4px var(--accent-red); }
+    50% { box-shadow: 0 0 15px var(--accent-red), 0 0 30px rgba(255,0,0,0.3); }
+  }
+
+  /* Back link */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #555;
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: #ccc;
+  }
+</style>
+</head>
+<body data-page="case-file">
+
+<!-- Database Header -->
+<div class="db-header">
+  <span class="db-logo">⚡ 公安冷案数据库 v3.7</span>
+  <span style="display:flex;gap:20px;align-items:center;">
+    <span class="db-status">🟢 在线</span>
+    <span class="db-user">访问身份：王建国 (已故) · 档案查阅</span>
+  </span>
+</div>
+
+<div class="case-container">
+  <a href="../index.html" class="back-link">← 返回工作站</a>
+
+  <!-- Case Header -->
+  <div class="case-header-card fade-in">
+    <div class="case-number">案件编号：CR-1999-247</div>
+    <div class="case-title-big">鸦岭村集体失踪事件</div>
+    <div class="case-subtitle">CROW RIDGE VILLAGE — MASS DISAPPEARANCE</div>
+    <div class="case-status-badge" style="margin-top:8px;">⚠️ 未解决 · 已封存</div>
+    <div style="margin-top:16px;font-size:0.8rem;color:#444;">
+      最后更新：2004年6月12日 — 王建国警官
+    </div>
+  </div>
+
+  <!-- Info Grid -->
+  <div class="info-grid scroll-reveal">
+    <div class="info-cell">
+      <div class="info-label">案件类型</div>
+      <div class="info-value">集体失踪 / 疑似刑事案件</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">案发日期</div>
+      <div class="info-value">1999年12月31日</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">案发地点</div>
+      <div class="info-value">H省S市鸦岭乡鸦岭村</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">失踪人数</div>
+      <div class="info-value" style="color:var(--accent-red);font-size:1.2rem;font-weight:700;">247</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">官方结论</div>
+      <div class="info-value">山体滑坡 · 全员遇难</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">结案日期</div>
+      <div class="info-value">2000年3月15日</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">重启调查</div>
+      <div class="info-value">2003年8月 · 王建国</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">当前状态</div>
+      <div class="info-value" style="color:var(--accent-red);">封存 · 限制调阅</div>
+    </div>
+  </div>
+
+  <!-- Section 1: Official Narrative -->
+  <div class="section-panel scroll-reveal">
+    <div class="section-header open" onclick="toggleSection(this)">
+      <span>📋 官方记录</span>
+      <span class="expand-icon">▶</span>
+    </div>
+    <div class="section-body open">
+      <p><strong>1999年12月31日</strong>，鸦岭乡派出所接到报警，称鸦岭村方向传来"巨大的响声"。由于当日为除夕夜，且通往鸦岭村的唯一道路被大雪封锁，警方未能第一时间到达现场。</p>
+      <p><strong>2000年1月3日</strong>，搜救队抵达鸦岭村所在地，报告称"整座村庄被山体滑坡掩埋"。现场未发现幸存者。<span class="hidden-clue" onclick="this.classList.toggle('revealed');if(this.classList.contains('revealed')){Game.addClue('no-bodies','没有尸体','官方报告声称山体滑坡，但从未提及找到任何遗体——247人凭空消失。');document.getElementById('anomalyNote').style.display='block';}">████████████████████████████</span></p>
+      <p><strong>2000年3月15日</strong>，案件被定性为"自然灾害"，正式结案。247名村民被宣告死亡。</p>
+      <div id="anomalyNote" style="display:none;" class="investigator-note">
+        ⚠️ <strong>王建国备注（2003年9月）：</strong><br>
+        "查阅了所有相关文件——没有一份报告提到发现遗体。不是'未完全找到'，是<strong>一具都没有</strong>。山体滑坡掩埋了247个人，却连一根骨头都没找到？这不可能。"
+        <div class="note-author">—— 王建国，刑侦三处</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Wang Jianguo's Investigation -->
+  <div class="section-panel scroll-reveal">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span>🔍 王建国警官的调查记录（2003-2004）</span>
+      <span class="expand-icon">▶</span>
+    </div>
+    <div class="section-body">
+      <p style="color:#ccc;"><strong>调查重启原因：</strong></p>
+      <p>2003年7月，一名自称鸦岭村"远亲"的人向省公安厅举报，称在邻省某市发现了一个使用鸦岭村已故村民身份证号的人。王建国受命进行初步核实。</p>
+
+      <div class="investigator-note">
+        "起初我以为这只是身份证被盗用的普通案件。但当我开始追查，发现至少有<strong>17个</strong>'已故'村民的身份证号在1999年之后被使用过。17个。在不同的省份。这不是巧合。"
+        <div class="note-author">—— 王建国，调查笔记，2003年10月</div>
+      </div>
+
+      <p class="mt-3" style="color:#ccc;"><strong>关键发现：</strong></p>
+      <ul style="padding-left:20px;margin-top:8px;">
+        <li style="margin-bottom:8px;">卫星图像显示，鸦岭村<span style="color:var(--accent-red);">在"山体滑坡"后仍然存在</span>——建筑完好，没有滑坡痕迹。</li>
+        <li style="margin-bottom:8px;">1999年12月29-30日，一支军方车队被目击驶向鸦岭村方向。</li>
+        <li style="margin-bottom:8px;">多名"已故"村民出现在其他城市的户籍系统中，他们的新档案上都标注着相同的代码：<span class="text-mono" style="color:var(--accent-amber);">YN-047</span>。</li>
+        <li style="margin-bottom:8px;">王建国发现一个名为<span style="color:var(--accent-red);">"夜莺"</span>的项目代号反复出现在相关文件中。</li>
+      </ul>
+
+      <div class="investigator-note">
+        "每一条线索都指向同一个方向：军方。'夜莺计划'——我查不到这个项目的任何公开信息，但它在至少4份内部通讯中被提及。每当我试图深入了解，就会遇到阻力。我的上级让我'不要深究'。昨天，我办公室的门锁被换了。"
+        <div class="note-author">—— 王建国，调查笔记，2004年3月</div>
+      </div>
+
+      <p class="mt-3" style="color:var(--accent-red);"><strong>2004年6月12日</strong>——王建国在最后一次更新案件记录后，于回家途中发生"交通事故"，当场死亡。他随身携带的调查笔记不翼而飞。</p>
+    </div>
+  </div>
+
+  <!-- Section 3: Evidence Index -->
+  <div class="section-panel scroll-reveal">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span>📦 证据索引</span>
+      <span class="expand-icon">▶</span>
+    </div>
+    <div class="section-body">
+      <ul class="evidence-list">
+        <li onclick="window.open('evidence.html','_blank')">
+          <span>📄</span>
+          <span class="ev-id">EX-001</span>
+          <span>现场照片（12张）</span>
+          <span class="ev-status available">可查阅</span>
+        </li>
+        <li onclick="window.open('evidence.html','_blank')">
+          <span>📄</span>
+          <span class="ev-id">EX-002</span>
+          <span>村民张伟的日记残片</span>
+          <span class="ev-status available">可查阅</span>
+        </li>
+        <li>
+          <span>🔒</span>
+          <span class="ev-id">EX-003</span>
+          <span>保密录音带（需授权码）</span>
+          <span class="ev-status classified">需要密码</span>
+        </li>
+        <li>
+          <span>🔒</span>
+          <span class="ev-id">EX-004</span>
+          <span>军方通讯记录（截获）</span>
+          <span class="ev-status classified">需要密码</span>
+        </li>
+        <li onclick="window.open('evidence.html','_blank')">
+          <span>📄</span>
+          <span class="ev-id">EX-005</span>
+          <span>现场勘查报告</span>
+          <span class="ev-status available">可查阅</span>
+        </li>
+      </ul>
+
+      <!-- Evidence Room Access -->
+      <div class="code-area mt-3">
+        <div class="code-hint">
+          🔒 完整证据库需要授权码访问<br>
+          <span style="font-size:0.7rem;color:#444;">提示：王建国在他的笔记中留下了一个代码...仔细观察上面的记录。</span>
+        </div>
+        <div class="input-group" style="justify-content:center;">
+          <input type="text" class="input-field" id="evidenceCode" placeholder="输入授权码..." style="max-width:280px;">
+          <button class="btn btn-primary" onclick="checkEvidenceCode()">验证</button>
+        </div>
+        <div id="codeResult" style="margin-top:8px;font-size:0.8rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Attached Clues -->
+  <div class="section-panel scroll-reveal">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span>🖼️ 卫星图像对比</span>
+      <span class="expand-icon">▶</span>
+    </div>
+    <div class="section-body">
+      <p style="margin-bottom:16px;">王建国获取了鸦岭村地区的卫星图像。这两张图像显示了...矛盾。</p>
+      <div class="satellite-compare">
+        <div class="satellite-img">
+          <div class="img-placeholder">
+            <svg viewBox="0 0 100 70" width="100%" height="100%">
+              <rect width="100" height="70" fill="#0a1410"/>
+              <rect x="20" y="10" width="8" height="6" fill="#1a3020" rx="1"/>
+              <rect x="30" y="12" width="7" height="5" fill="#1a3020" rx="1"/>
+              <rect x="40" y="8" width="9" height="7" fill="#1a3020" rx="1"/>
+              <rect x="55" y="14" width="8" height="6" fill="#1a3020" rx="1"/>
+              <rect x="25" y="25" width="30" height="15" fill="#15281a" rx="2"/>
+              <rect x="60" y="20" width="20" height="25" fill="#15281a" rx="2"/>
+              <rect x="15" y="35" width="15" height="10" fill="#1a3020" rx="1"/>
+              <circle cx="45" cy="30" r="1.5" fill="#2a4a30"/>
+              <circle cx="65" cy="22" r="1" fill="#2a4a30"/>
+              <circle cx="30" cy="28" r="1" fill="#2a4a30"/>
+            </svg>
+          </div>
+          <div class="img-label">1999年11月 · 鸦岭村</div>
+        </div>
+        <div class="satellite-img">
+          <div class="img-placeholder" style="position:relative;">
+            <svg viewBox="0 0 100 70" width="100%" height="100%">
+              <rect width="100" height="70" fill="#0a1410"/>
+              <rect x="20" y="10" width="8" height="6" fill="#1a3020" rx="1"/>
+              <rect x="30" y="12" width="7" height="5" fill="#1a3020" rx="1"/>
+              <rect x="40" y="8" width="9" height="7" fill="#1a3020" rx="1"/>
+              <rect x="55" y="14" width="8" height="6" fill="#1a3020" rx="1"/>
+              <rect x="25" y="25" width="30" height="15" fill="#15281a" rx="2"/>
+              <rect x="60" y="20" width="20" height="25" fill="#15281a" rx="2"/>
+              <rect x="15" y="35" width="15" height="10" fill="#1a3020" rx="1"/>
+              <circle cx="45" cy="30" r="1.5" fill="#2a4a30"/>
+              <circle cx="65" cy="22" r="1" fill="#2a4a30"/>
+              <circle cx="30" cy="28" r="1" fill="#2a4a30"/>
+            </svg>
+            <div class="anomaly-dot" style="top:20%;left:50%;"></div>
+            <div class="anomaly-dot" style="top:55%;left:35%;animation-delay:1s;"></div>
+          </div>
+          <div class="img-label">2000年3月 · "滑坡后" · <span style="color:var(--accent-red);">⚠️ 异常</span></div>
+        </div>
+      </div>
+      <p style="font-size:0.8rem;color:#555;margin-top:12px;">
+        ⚠️ 2000年3月的图像中，村庄建筑轮廓仍然清晰可见。没有山体滑坡的地质痕迹。王建国标注了两个"异常热源点"——这些点在后来的图像中被模糊处理。
+      </p>
+      <button class="btn btn-small mt-2" onclick="Game.addClue('satellite-anomaly','卫星图像异常','2000年3月的卫星图像显示鸦岭村完好无损。官方声称的山体滑坡是谎言。村庄被标记为存在但被军方管控。');this.textContent='✓ 线索已记录';this.disabled=true;">记录此线索</button>
+    </div>
+  </div>
+
+  <!-- Hidden reference number -->
+  <div class="section-panel scroll-reveal" style="opacity:0.5;">
+    <div class="section-body open" style="display:block;text-align:center;font-family:var(--font-mono);font-size:0.7rem;color:#222;">
+      系统日志 · 王建国最后查询 · 2004-06-12 21:47:03 · 查询关键词：N1GHT1NG4L3 · 查询状态：已拦截
+    </div>
+  </div>
+
+</div>
+
+<!-- Clue Panel -->
+<div class="clue-panel-overlay" id="cluePanelOverlay"></div>
+<div class="clue-panel" id="cluePanel">
+  <h3 style="margin-bottom:16px;font-family:var(--font-serif);">🔍 线索记录</h3>
+  <div class="progress-bar mb-2">
+    <div class="progress-fill" id="clueProgress" style="width:0%;"></div>
+  </div>
+  <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:16px;">
+    已发现: <span id="clueCount">0</span> / 12 条线索
+  </div>
+  <div id="clueList"></div>
+  <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-subtle);">
+    <button class="btn btn-small" onclick="if(confirm('确定要重置所有游戏进度吗？')){Game.reset();location.reload();}" style="width:100%;">🔄 重置进度</button>
+  </div>
+</div>
+
+<div class="clue-tracker">
+  <button class="clue-tracker-btn" id="clueTrackerBtn" title="查看线索记录">🔍</button>
+</div>
+
+<div class="status-bar">
+  <span><span class="status-dot warning"></span> 冷案数据库 · CR-1999-247</span>
+  <span>⏱️ 会话已持续: <span id="sessionTime">00:00</span></span>
+</div>
+
+<script src="../js/game.js"></script>
+<script>
+  // Toggle sections
+  function toggleSection(header) {
+    header.classList.toggle('open');
+    header.nextElementSibling.classList.toggle('open');
+  }
+
+  // Evidence code check
+  function checkEvidenceCode() {
+    const input = document.getElementById('evidenceCode');
+    const result = document.getElementById('codeResult');
+
+    if (Game.checkCode(input.value, 'N1GHT1NG4L3')) {
+      result.innerHTML = '<span style="color:#00cc00;">✓ 授权通过！正在跳转到证据保险库...</span>';
+      Game.unlock('evidence-vault');
+      Game.addClue('evidence-access', '证据库解锁', '使用王建国的授权码 N1GHT1NG4L3 解锁了完整证据库。');
+      setTimeout(() => {
+        window.open('evidence.html', '_blank');
+      }, 1500);
+    } else if (input.value.trim().toUpperCase() === 'NIGHTINGALE') {
+      result.innerHTML = '<span style="color:var(--accent-amber);">接近了...但还差一点。注意王建国查询日志中的字符。</span>';
+    } else if (input.value.trim().length > 0) {
+      result.innerHTML = '<span style="color:var(--accent-red);">✗ 授权码错误。请仔细阅读案件记录。</span>';
+    }
+  }
+
+  // Add case file clues
+  if (!Game.hasClue('case-basics')) {
+    Game.addClue('case-basics', '案件基本信息', '鸦岭村247名村民于1999年12月31日失踪。官方声称山体滑坡，但疑点重重。案件编号CR-1999-247。');
+  }
+
+  // Session timer
+  let sec = 0;
+  setInterval(() => {
+    sec++;
+    document.getElementById('sessionTime').textContent =
+      Math.floor(sec/60).toString().padStart(2,'0') + ':' + (sec%60).toString().padStart(2,'0');
+  }, 1000);
+
+  // Progress updater
+  setInterval(() => {
+    const pct = Math.round((Game.cluesFound.length / 12) * 100);
+    const bar = document.getElementById('clueProgress');
+    if (bar) bar.style.width = pct + '%';
+  }, 2000);
+</script>
+
+</body>
+</html>

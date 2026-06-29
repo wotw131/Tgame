@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>监控终端 — A-1安置点</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  body {
+    background: #000;
+    overflow: hidden;
+    height: 100vh;
+    cursor: none;
+  }
+
+  /* Full screen surveillance interface */
+  .surveillance-terminal {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #050505;
+    position: relative;
+  }
+
+  /* Top bar */
+  .surv-topbar {
+    background: #0a0a0a;
+    border-bottom: 1px solid #1a1a1a;
+    padding: 8px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #444;
+    flex-shrink: 0;
+  }
+
+  .surv-topbar .surv-title {
+    color: #00cc00;
+    letter-spacing: 0.1em;
+  }
+
+  .surv-topbar .rec-dot {
+    width: 8px;
+    height: 8px;
+    background: #ff0000;
+    border-radius: 50%;
+    display: inline-block;
+    animation: blink 0.6s step-end infinite;
+    margin-right: 6px;
+  }
+
+  /* Main area */
+  .surv-main {
+    flex: 1;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Webcam feed - central */
+  .webcam-feed {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    position: relative;
+    border-right: 1px solid #1a1a1a;
+  }
+
+  .webcam-feed .feed-container {
+    position: relative;
+    width: 80%;
+    max-width: 560px;
+    aspect-ratio: 4/3;
+    background: #0a0a0a;
+    border: 2px solid #1a1a1a;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .webcam-feed .feed-image {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  /* Simulated webcam view - shows a silhouette */
+  .silhouette {
+    width: 100px;
+    height: 130px;
+    position: relative;
+    opacity: 0.15;
+    transition: opacity 3s ease;
+  }
+
+  .silhouette.revealing {
+    opacity: 0.6;
+  }
+
+  .silhouette .head {
+    width: 50px;
+    height: 55px;
+    background: #333;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+
+  .silhouette .body {
+    width: 70px;
+    height: 60px;
+    background: #333;
+    border-radius: 40% 40% 0 0;
+    margin: 5px auto 0;
+  }
+
+  /* Webcam overlay elements */
+  .cam-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+
+  .cam-rec-indicator {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: #ff0000;
+  }
+
+  .cam-timestamp {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .cam-subject-label {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* Side panel - system messages */
+  .surv-sidebar {
+    width: 380px;
+    background: #080808;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    border-left: 1px solid #1a1a1a;
+  }
+
+  .surv-sidebar .sidebar-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #1a1a1a;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .surv-log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.8;
+    color: #444;
+  }
+
+  .log-entry {
+    margin-bottom: 6px;
+    opacity: 0;
+    animation: logFadeIn 0.5s ease forwards;
+  }
+
+  @keyframes logFadeIn {
+    to { opacity: 1; }
+  }
+
+  .log-entry .log-time {
+    color: #333;
+    margin-right: 8px;
+  }
+
+  .log-entry.warning {
+    color: var(--accent-amber);
+  }
+
+  .log-entry.alert {
+    color: var(--accent-red);
+    font-weight: 700;
+  }
+
+  .log-entry.system {
+    color: #00cc00;
+  }
+
+  /* Bottom status bar */
+  .surv-bottombar {
+    background: #0a0a0a;
+    border-top: 1px solid #1a1a1a;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: #333;
+    flex-shrink: 0;
+  }
+
+  /* Static noise overlay */
+  .noise-line {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255,255,255,0.008) 2px,
+      rgba(255,255,255,0.008) 4px
+    );
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Final message overlay */
+  .final-message {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    transition: background 3s ease;
+  }
+
+  .final-message.active {
+    background: rgba(0,0,0,0.92);
+    pointer-events: all;
+  }
+
+  .message-content {
+    text-align: center;
+    opacity: 0;
+    transition: opacity 2s ease;
+    max-width: 600px;
+    padding: 40px;
+  }
+
+  .final-message.active .message-content {
+    opacity: 1;
+  }
+
+  .message-content .glitch-text {
+    font-family: var(--font-mono);
+    font-size: 3rem;
+    color: var(--accent-red);
+    letter-spacing: 0.2em;
+    text-shadow: 0 0 30px rgba(255,0,0,0.5), 0 0 60px rgba(255,0,0,0.2);
+    animation: textFlicker 3s ease infinite;
+  }
+
+  @keyframes textFlicker {
+    0%, 100% { opacity: 1; }
+    5% { opacity: 0.8; }
+    10% { opacity: 1; }
+    15% { opacity: 0.3; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    82% { opacity: 0.6; }
+    84% { opacity: 1; }
+  }
+
+  .message-content .sub-text {
+    color: #888;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    margin-top: 20px;
+    line-height: 2;
+  }
+
+  .message-content .final-line {
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    margin-top: 30px;
+    letter-spacing: 0.1em;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+  }
+
+  /* Blinking cursor at end */
+  .cursor-blink {
+    display: inline-block;
+    width: 8px;
+    height: 18px;
+    background: var(--accent-red);
+    animation: blink 0.7s step-end infinite;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .surv-main {
+      flex-direction: column;
+    }
+    .surv-sidebar {
+      width: 100%;
+      max-height: 200px;
+    }
+    .webcam-feed .feed-container {
+      width: 95%;
+    }
+  }
+</style>
+</head>
+<body data-page="final">
+
+<div class="surveillance-terminal">
+  <!-- Top Bar -->
+  <div class="surv-topbar">
+    <span class="surv-title">🖥️ 夜莺监控系统 v2.4 · A-1安置点</span>
+    <span>
+      <span class="rec-dot"></span> REC
+      &nbsp;&nbsp;
+      会话: <span id="sessionId">NGT-A1-20241117-0247</span>
+    </span>
+  </div>
+
+  <!-- Main Area -->
+  <div class="surv-main">
+    <!-- Webcam Feed -->
+    <div class="webcam-feed">
+      <div class="feed-container">
+        <div class="feed-image" id="feedImage">
+          <div class="silhouette" id="silhouette">
+            <div class="head"></div>
+            <div class="body"></div>
+          </div>
+          <p style="color:#1a1a1a;font-size:0.7rem;font-family:var(--font-mono);margin-top:8px;">
+            前置摄像头 · 实时
+          </p>
+        </div>
+        <div class="cam-overlay">
+          <div class="cam-rec-indicator">
+            <span style="width:6px;height:6px;background:#ff0000;border-radius:50%;display:inline-block;animation:blink 0.6s step-end infinite;"></span>
+            LIVE
+          </div>
+          <div class="cam-timestamp" id="camTime">2024-11-17 02:47:13</div>
+          <div class="cam-subject-label">SUBJECT: YN-047 · 林夏</div>
+        </div>
+        <div class="noise-line"></div>
+      </div>
+    </div>
+
+    <!-- System Log Sidebar -->
+    <div class="surv-sidebar">
+      <div class="sidebar-header">📋 系统日志 · 实时</div>
+      <div class="surv-log" id="survLog">
+        <!-- Logs will be added by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="surv-bottombar">
+    <span>连接: <span style="color:#00cc00;">● 稳定</span></span>
+    <span>延迟: 23ms</span>
+    <span>加密: AES-256</span>
+    <span id="alertStatus" style="color:#333;">状态: 正常监控</span>
+  </div>
+</div>
+
+<!-- Final Message Overlay -->
+<div class="final-message" id="finalMessage">
+  <div class="message-content">
+    <div class="glitch-text">你 被 看 见 了</div>
+    <div class="sub-text">
+      <p>从你打开第一封邮件开始，</p>
+      <p>我们就一直在看着你。</p>
+      <p>你以为你在调查真相。</p>
+      <p><span style="color:var(--accent-red);">不。是真相在观察你。</span></p>
+    </div>
+    <div class="final-line">
+      <p>重置协议已启动。</p>
+      <p>24小时内，你将忘记这一切。</p>
+      <p>你会重新成为"林夏"——那个什么都不知道的调查记者。</p>
+      <p style="margin-top:16px;color:#555;">又或者...</p>
+      <p style="color:var(--accent-red);font-weight:700;font-size:1.1rem;">
+        你可以选择记住。
+      </p>
+      <p style="color:#888;font-size:0.85rem;">
+        但记住的代价是——<br>
+        你知道有人在看着你。<br>
+        <span style="color:var(--accent-red);">每一天。每一秒。永远。</span>
+      </p>
+    </div>
+    <div style="margin-top:40px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn" onclick="chooseForget()" style="border-color:#555;">
+        接受重置 · 忘记一切
+      </button>
+      <button class="btn btn-primary" onclick="chooseRemember()">
+        拒绝重置 · 带着真相活下去
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/game.js"></script>
+<script>
+  // ========== Surveillance Terminal Logic ==========
+
+  const logEl = document.getElementById('survLog');
+  const silhouette = document.getElementById('silhouette');
+  const finalMessage = document.getElementById('finalMessage');
+  const alertStatus = document.getElementById('alertStatus');
+  const camTime = document.getElementById('camTime');
+
+  // Update camera timestamp
+  function updateCamTime() {
+    const now = new Date();
+    camTime.textContent = '2024-11-17 ' +
+      now.getHours().toString().padStart(2,'0') + ':' +
+      now.getMinutes().toString().padStart(2,'0') + ':' +
+      now.getSeconds().toString().padStart(2,'0');
+  }
+  updateCamTime();
+  setInterval(updateCamTime, 1000);
+
+  // Simulated system log entries
+  const logSequence = [
+    { time: '02:47:03', text: '系统启动 · 监控会话初始化', type: 'system' },
+    { time: '02:47:05', text: '受试者 YN-047 已识别 · 身份确认: 林夏', type: 'system' },
+    { time: '02:47:08', text: '前置摄像头已激活 · 分辨率: 1080p', type: 'system' },
+    { time: '02:47:12', text: '⚠ 受试者正在访问冷案数据库 CR-1999-247', type: 'warning' },
+    { time: '02:47:18', text: '受试者已查看案件基本信息和卫星图像', type: 'system' },
+    { time: '02:47:25', text: '⚠ 受试者发现王建国的调查笔记 · 记忆触发风险: 中等', type: 'warning' },
+    { time: '02:47:33', text: '受试者正在浏览证据档案...', type: 'system' },
+    { time: '02:47:40', text: '⚠ 受试者阅读了张伟的日记 · 提及"夜莺计划"', type: 'warning' },
+    { time: '02:47:48', text: '⚠ 受试者访问了午夜真相论坛 · 多位用户提及047号', type: 'warning' },
+    { time: '02:47:55', text: '⚠ 记忆稳定性下降 · 当前: 91.3% (基准: 99.7%)', type: 'warning' },
+    { time: '02:48:02', text: '🔴 受试者输入了夜莺计划文档的正确密码', type: 'alert' },
+    { time: '02:48:10', text: '🔴 受试者查看了受试者名单 · 已看到YN-047条目', type: 'alert' },
+    { time: '02:48:17', text: '🔴 记忆稳定性急剧下降 · 当前: 67.8%', type: 'alert' },
+    { time: '02:48:24', text: '🔴 严重警报: 受试者正在查看自己的完整档案', type: 'alert' },
+    { time: '02:48:31', text: '🔴 受试者已确认自身身份为YN-047 · 植入记忆屏障崩溃', type: 'alert' },
+    { time: '02:48:38', text: '🔴 记忆稳定性: 23.4% · 原始记忆大量恢复中', type: 'alert' },
+    { time: '02:48:45', text: '系统建议: 立即启动重置协议', type: 'alert' },
+    { time: '02:48:50', text: '重置协议待命 · 等待监控员确认...', type: 'alert' },
+    { time: '02:48:55', text: '⚠ 受试者正在查看实时监控画面 · 受试者已意识到被监控', type: 'warning' },
+  ];
+
+  let logIndex = 0;
+
+  function addLogEntry() {
+    if (logIndex >= logSequence.length) return;
+
+    const entry = logSequence[logIndex];
+    const div = document.createElement('div');
+    div.className = 'log-entry ' + entry.type;
+    div.innerHTML = `<span class="log-time">[${entry.time}]</span> ${entry.text}`;
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+
+    // Update alert status
+    if (entry.type === 'alert') {
+      alertStatus.innerHTML = '状态: <span style="color:var(--accent-red);animation:blink 0.8s step-end infinite;">⚠ 警报 · 记忆屏障崩溃</span>';
+    }
+
+    logIndex++;
+
+    // When all logs are shown, reveal the final message
+    if (logIndex >= logSequence.length) {
+      setTimeout(showFinalMessage, 3000);
+    }
+  }
+
+  // Start log sequence
+  function startLogSequence() {
+    // First few entries quickly
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => addLogEntry(), i * 800);
+    }
+    // Then gradually slower for dramatic effect
+    for (let i = 3; i < logSequence.length; i++) {
+      setTimeout(() => addLogEntry(), i * 1200);
+    }
+  }
+
+  // Show the final message
+  function showFinalMessage() {
+    finalMessage.classList.add('active');
+    // Gradually reveal silhouette
+    silhouette.classList.add('revealing');
+    Game.addClue('monitoring-active', '实时监控', '我的一切行动都在夜莺计划的监控之下。摄像头一直在拍摄。系统日志记录了我的每一个操作。重置协议已经待命。');
+    Game.addClue('final-choice', '最后的抉择', '接受重置——忘记一切，重新成为"林夏"。或者拒绝——带着真相活下去，但永远知道有人在看着你。');
+  }
+
+  // Player choices
+  function chooseForget() {
+    document.querySelector('.message-content').innerHTML = `
+      <div class="glitch-text" style="font-size:2rem;">重置协议 · 执行中</div>
+      <div class="sub-text">
+        <p>药物已投递。</p>
+        <p>音频诱导已开始。</p>
+        <p>24小时后，你将醒来——</p>
+        <p>什么都不记得。</p>
+        <p>你会继续调查鸦岭案。</p>
+        <p>你会再次找到这些文件。</p>
+        <p>你会再次发现真相。</p>
+        <p style="color:var(--accent-red);">然后我们还会在这里。</p>
+        <p style="color:var(--accent-red);font-weight:700;">等你。</p>
+      </div>
+      <div class="final-line">
+        <p style="color:#555;">这是一个循环。</p>
+        <p style="color:#888;">你已经是第██次"发现"真相了。</p>
+        <p style="color:var(--accent-red);">也许下一次...你会做出不同的选择。</p>
+        <p style="margin-top:24px;"><span class="cursor-blink"></span></p>
+      </div>
+      <button class="btn btn-small mt-3" onclick="location.reload()" style="margin-top:24px;">🔄 再次尝试</button>
+    `;
+  }
+
+  function chooseRemember() {
+    document.querySelector('.message-content').innerHTML = `
+      <div class="glitch-text" style="font-size:2rem;color:#daa520;">你选择了真相</div>
+      <div class="sub-text">
+        <p>重置协议已取消。</p>
+        <p>你的记忆不会消失。</p>
+        <p>从现在开始，你知道自己是谁：</p>
+        <p style="color:var(--accent-gold);font-weight:700;font-size:1.2rem;">
+          你是鸦岭村的孩子。
+        </p>
+        <p style="color:var(--accent-gold);">
+          你是247个被偷走人生的人之一。
+        </p>
+        <p>你无法改变过去。</p>
+        <p>但也许...</p>
+        <p style="color:#daa520;">你可以找到其他人。</p>
+        <p style="color:#daa520;">241个幸存者。分散在全国各地。</p>
+        <p style="color:#daa520;">他们也以为自己是别人。</p>
+        <p style="margin-top:16px;color:#ccc;font-weight:700;">
+          你的调查——现在才真正开始。
+        </p>
+      </div>
+      <div class="final-line">
+        <p style="color:#888;">他们会继续看着你。这不会停止。</p>
+        <p style="color:#ccc;font-weight:700;">但是——</p>
+        <p style="color:#fff;font-size:1.1rem;font-weight:700;">
+          至少这一次，你知道他们在看着。
+        </p>
+        <p style="color:#daa520;font-size:1.2rem;font-weight:700;margin-top:16px;">
+          而这意味着——<br>你终于可以反击。
+        </p>
+      </div>
+      <div style="margin-top:24px;padding:16px;background:rgba(218,165,32,0.1);border:1px solid rgba(218,165,32,0.3);border-radius:4px;">
+        <p style="color:var(--accent-gold);font-size:0.9rem;">
+          🏆 <strong>恭喜你完成了《鸦岭》。</strong><br>
+          你发现了全部12条线索，揭开了被掩埋25年的真相。
+        </p>
+        <p style="color:#888;font-size:0.8rem;margin-top:8px;">
+          时长约2小时 · 真正的恐怖不是鬼怪——<br>
+          而是发现你的整个人生，都是一个实验。
+        </p>
+      </div>
+      <button class="btn btn-small mt-3" onclick="if(confirm('重置所有进度重新开始？')){Game.reset();window.location.href='../index.html';}" style="margin-top:16px;">🔄 重新开始</button>
+    `;
+  }
+
+  // Start the sequence after a short delay
+  setTimeout(startLogSequence, 1500);
+
+  // Final clue addition
+  if (!Game.hasClue('webcam-final')) {
+    setTimeout(() => {
+      Game.addClue('webcam-final', '摄像头真相', '监控终端显示——我的电脑摄像头一直在被夜莺计划远程访问。每一步调查都在他们的注视之下。');
+    }, 8000);
+  }
+
+  // Progress updater
+  setInterval(() => {
+    const pct = Math.round((Game.cluesFound.length / 12) * 100);
+    const bar = document.getElementById('clueProgress');
+    if (bar) bar.style.width = pct + '%';
+  }, 2000);
+</script>
+
+<!-- Clue panel elements (hidden on this page for immersion) -->
+<div class="clue-panel-overlay" id="cluePanelOverlay"></div>
+<div class="clue-panel" id="cluePanel">
+  <h3 style="margin-bottom:16px;font-family:var(--font-serif);">🔍 线索记录</h3>
+  <div class="progress-bar mb-2">
+    <div class="progress-fill" id="clueProgress" style="width:0%;"></div>
+  </div>
+  <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:16px;">
+    已发现: <span id="clueCount">0</span> / 12 条线索
+  </div>
+  <div id="clueList"></div>
+  <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-subtle);">
+    <button class="btn btn-small" onclick="if(confirm('确定要重置所有游戏进度吗？')){Game.reset();location.reload();}" style="width:100%;">🔄 重置进度</button>
+  </div>
+</div>
+<div class="clue-tracker" style="opacity:0.3;">
+  <button class="clue-tracker-btn" id="clueTrackerBtn" title="查看线索记录">🔍</button>
+</div>
+
+</body>
+</html>
