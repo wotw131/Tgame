@@ -17,6 +17,8 @@ echo.
 
 start "" "index.html"
 
+echo   📋 提示：如果页面没有自动打开，请手动双击 index.html
+
 echo   ✅ 游戏已在浏览器中打开。
 echo   📋 提示：如果页面没有自动打开，请手动双击 index.html
 echo.
