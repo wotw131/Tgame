@@ -321,8 +321,8 @@
       <button class="btn btn-primary" onclick="checkPassword()">解密</button>
     </div>
     <div id="passwordResult" style="margin-top:12px;font-size:0.85rem;"></div>
-    <div style="margin-top:20px;font-size:0.7rem;color:#333;">
-      💡 提示：密码是鸦岭事件发生的日期。你在论坛中找到过它。
+    <div style="margin-top:20px;font-size:0.55rem;color:#1a1a1a;text-align:center;">
+      加密算法：AES-256 · 密钥派生：PBKDF2 · 迭代次数：10000 · 盐值：CR-1999-12-31
     </div>
   </div>
 
@@ -504,15 +504,17 @@
       <div class="page-number">— 4 —</div>
     </div>
 
-    <!-- Navigation to patient file -->
-    <div style="text-align:center;padding:30px;background:#0d1117;border:1px solid #1a1a1a;border-radius:4px;margin-top:20px;">
-      <p style="color:#555;font-size:0.85rem;margin-bottom:8px;">
-        📋 受试者YN-047的详细档案被单独存储。
+    <!-- Navigation to patient file - made subtle -->
+    <div style="text-align:center;padding:20px;background:#0d1117;border:1px solid #151515;border-radius:4px;margin-top:20px;">
+      <p style="color:#2a2a2a;font-size:0.65rem;margin-bottom:4px;">
+        附录A · 受试者完整档案索引 · 247个条目 · 241个标记为"转移后" · 6个标记为"终止"
       </p>
-      <p style="color:#333;font-size:0.75rem;margin-bottom:16px;">
-        访问受试者YN-047完整档案需要输入其编号：<span style="font-family:var(--font-mono);">SUBJECT-047</span>
+      <p style="color:#1a1a1a;font-size:0.55rem;margin-bottom:12px;">
+        YN-047档案路径: /archive/PLA-MED/███/subject-047.enc · 需要独立授权
       </p>
-      <a href="patient-file.html" class="btn btn-primary">查看受试者 YN-047 档案 →</a>
+      <p style="color:#333;font-size:0.65rem;cursor:pointer;" onclick="window.open('patient-file.html','_blank');">
+        [访问独立档案]
+      </p>
     </div>
   </div>
 </div>
@@ -535,11 +537,6 @@
 <div class="clue-tracker">
   <button class="clue-tracker-btn" id="clueTrackerBtn" title="查看线索记录">🔍</button>
 </div>
-<div class="status-bar">
-  <span><span class="status-dot warning"></span> 机密文档 · 离线查看</span>
-  <span>🔴 此文档不应被公开</span>
-</div>
-
 <script src="../js/game.js"></script>
 <script>
   function checkPassword() {
@@ -556,7 +553,7 @@
         window.scrollTo(0, 0);
       }, 1500);
     } else if (input.value.trim().length > 0) {
-      result.innerHTML = '<span style="color:var(--accent-red);">✗ 密码错误。提示：鸦岭事件发生的日期——年月日连在一起，8位数字。</span>';
+      result.innerHTML = '<span style="color:var(--accent-red);">✗ 密码错误。需要8位数字密码。</span>';
     }
   }
 

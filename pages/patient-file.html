@@ -364,8 +364,8 @@
       <button class="btn btn-primary" onclick="checkSubjectCode()">访问档案</button>
     </div>
     <div id="codeResult" style="margin-top:12px;font-size:0.85rem;"></div>
-    <div style="margin-top:16px;font-size:0.65rem;color:#333;">
-      💡 提示：在实验报告和论坛中反复出现的那个编号...
+    <div style="margin-top:16px;font-size:0.5rem;color:#1a1a1a;text-align:center;">
+      档案系统 v1.4 · 安全节点 A-1 · 会话 ID: NGT-A1-20241117
     </div>
   </div>
 
@@ -526,11 +526,6 @@
 <div class="clue-tracker">
   <button class="clue-tracker-btn" id="clueTrackerBtn" title="查看线索记录">🔍</button>
 </div>
-<div class="status-bar">
-  <span><span class="status-dot active"></span> 机密档案系统</span>
-  <span>👁️ 访问记录已保存</span>
-</div>
-
 <script src="../js/game.js"></script>
 <script>
   function checkSubjectCode() {
@@ -547,7 +542,7 @@
         window.scrollTo(0, 0);
       }, 1500);
     } else if (input.value.trim().length > 0) {
-      result.innerHTML = '<span style="color:var(--accent-red);">✗ 无效编号。提示：在实验报告的受试者表格中，那个植入成功率为99.7%的编号。</span>';
+      result.innerHTML = '<span style="color:var(--accent-red);">✗ 编号不匹配。请确认受试者编号。</span>';
     }
   }
 

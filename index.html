@@ -521,6 +521,14 @@
       <span class="icon-img">🔒</span>
       <span class="icon-label">证据保险库</span>
     </div>
+    <div class="desktop-icon" onclick="openFakeLead()" title="张伟的日记——扫描件">
+      <span class="icon-img">📜</span>
+      <span class="icon-label">扫描文件_001</span>
+    </div>
+    <div class="desktop-icon" onclick="openFakeLead2()" title="卫星图像分析报告">
+      <span class="icon-img">🛰️</span>
+      <span class="icon-label">卫星图_1999</span>
+    </div>
   </div>
 
   <!-- Email Client Window -->
@@ -584,6 +592,24 @@
           </span>
           <span class="email-time">昨天 03:15</span>
         </div>
+        <!-- Email 4: Red Herring - Fake source -->
+        <div class="email-item" onclick="openEmail('fake')" id="emailFake">
+          <span class="email-sender">📰 新闻线索提供</span>
+          <span class="email-preview">
+            <div class="email-subject">关于鸦岭村——我知道一些事情</div>
+            <div class="email-snippet">林记者，我手上有1999年鸦岭村山体滑坡的独家照片。开价5000，有兴趣回复...</div>
+          </span>
+          <span class="email-time">11月15日</span>
+        </div>
+        <!-- Email 5: Red Herring - Paranormal -->
+        <div class="email-item" onclick="openEmail('ghost')" id="emailGhost">
+          <span class="email-sender">👻 灵异研究社</span>
+          <span class="email-preview">
+            <div class="email-subject">鸦岭村：中国最大的集体灵异事件？</div>
+            <div class="email-snippet">我们团队去年在鸦岭村旧址拍摄到了无法解释的灵异现象。247个灵魂...</div>
+          </span>
+          <span class="email-time">10月28日</span>
+        </div>
       </div>
 
       <!-- Email Detail Views -->
@@ -645,6 +671,41 @@
           <p style="color:#555;font-size:0.75rem;">—— 自动安全系统<br>此邮件由系统自动发送，请勿回复。</p>
         </div>
       </div>
+
+      <!-- Fake Email: Scam -->
+      <div class="email-detail" id="detail-fake">
+        <div class="email-meta">
+          <div class="email-from">发件人：news_tips2024@proton.me</div>
+          <div class="email-to">收件人：linxia@coldcase.net</div>
+          <div class="email-date">2024年11月15日 09:22</div>
+        </div>
+        <div class="email-body">
+          <p>林记者，你好。</p>
+          <p>我知道你在调查鸦岭村的事。我手上有一批1999年拍摄的独家照片——真正的山体滑坡现场，非常震撼。</p>
+          <p>开价5000元。先付定金2000，发照片。不满意全额退款。</p>
+          <p>有兴趣的话回复这封邮件。我只等你三天。</p>
+          <p style="color:#555;font-size:0.75rem;">—— 一个消息灵通的人</p>
+          <p style="color:#444;font-size:0.65rem;margin-top:16px;">（林夏备注：这封邮件不太对劲。1999年鸦岭村根本没有任何新闻照片流出——连官方都没有。这个人要么在撒谎，要么...他有的不是"山体滑坡"的照片。）</p>
+        </div>
+      </div>
+
+      <!-- Fake Email: Ghost story -->
+      <div class="email-detail" id="detail-ghost">
+        <div class="email-meta">
+          <div class="email-from">发件人：research@ghost-hunters.cn</div>
+          <div class="email-to">收件人：linxia@coldcase.net</div>
+          <div class="email-date">2024年10月28日 23:59</div>
+        </div>
+        <div class="email-body">
+          <p>林夏女士：</p>
+          <p>我们是一个民间灵异现象研究小组。去年我们在鸦岭村旧址进行了一次通灵实验。</p>
+          <p>我们使用 EVP（电子语音现象）设备记录到了非常清晰的声音。247 个不同的声音，反复说着同一句话。我们找语言学家分析过——是当地方言，意思是——</p>
+          <p style="color:var(--accent-red);">"我不叫这个名字。"</p>
+          <p>我们觉得这不只是灵异事件。这里面有更大的事。您感兴趣的话，我们可以把录音发给你。</p>
+          <p style="color:#555;font-size:0.75rem;">—— 灵异研究社 · 陈社长</p>
+          <p style="color:#444;font-size:0.65rem;margin-top:16px;">（林夏备注：不知道真假。但如果这些"灵异声音"是真的...247 个声音，247 个失踪的人。这个数字太精确了。）</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -674,12 +735,6 @@
 <!-- Clue Tracker Button -->
 <div class="clue-tracker">
   <button class="clue-tracker-btn" id="clueTrackerBtn" title="查看线索记录">🔍</button>
-</div>
-
-<!-- Status Bar -->
-<div class="status-bar">
-  <span><span class="status-dot active"></span> 系统运行中</span>
-  <span>🔒 加密连接 · TOR 网络</span>
 </div>
 
 <script src="js/game.js"></script>
@@ -712,7 +767,15 @@
   }
 
   function openNotes() {
-    alert('调查笔记：\n\n鸦岭村 (CR-1999-247)\n- 1999年12月31日，村庄消失\n- 官方解释：山体滑坡\n- 疑点：无尸体、无废墟\n- 王建国警官2003年重启调查\n- 王建国2004年6月"意外"死亡\n- 档案被调阅后未归还\n\n【待查事项】\n- 找到王建国的调查记录\n- 确认卫星图像\n- 寻找幸存者或目击者\n- 调查"夜莺"关联');
+    alert('调查笔记·林夏\n\n鸦岭村 (CR-1999-247)\n——————————————\n已知：1999.12.31 村庄消失\n官方结论：山体滑坡\n\n笔记碎片：\n→ 档案局回复：王建国2004年调阅\n→ 档案未归还\n→ 王建国已故\n→ ???\n\n其他：\n→ 需要更多资料\n→ 翻阅旧报纸\n→ 联系线人\n\n（笔记中夹着一张便签——\n"代号NIGHTINGALE——王建国最后一条查询记录。他在找什么？"）');
+  }
+
+  function openFakeLead() {
+    alert('文件损坏\n\n无法打开 "扫描文件_001.pdf"\n\n错误代码：0x80070002\n文件可能已损坏或格式不受支持。\n\n系统建议：删除此文件。');
+  }
+
+  function openFakeLead2() {
+    alert('卫星图像分析报告 — 1999年12月\n\n来源：欧洲航天局 · 公开数据\n\n分析结论：\n该区域在1999年12月31日前后\n云层覆盖率达97%，无法获取\n有效光学图像。\n\n雷达图像显示可能存在"轻微\n的地形变动"，但无证据支持\n大规模山体滑坡。\n\n注：此报告与官方说法存在矛盾。\n但不足以作为证据。');
   }
 
   // Auto-open the tip email

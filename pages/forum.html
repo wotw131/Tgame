@@ -382,6 +382,19 @@
       <span class="thread-replies">—</span>
       <span class="thread-last">—</span>
     </div>
+    <!-- Red herring threads -->
+    <div class="thread-item" onclick="alert('此帖子已被锁定。\n\n发帖人"科学解密"声称鸦岭事件是\n"集体癔症"，并引用了三篇学术论文。\n\n管理员备注：该用户使用了虚假的\n论文引用编号。账号已被封禁。\n\n最后回复（2004-12-03）：\n"你是军方的人吧？"')">
+      <span class="thread-title" style="color:#456;">鸦岭事件的科学解释（已被驳斥）</span>
+      <span class="thread-author">科学解密</span>
+      <span class="thread-replies">89</span>
+      <span class="thread-last">2004-12-03</span>
+    </div>
+    <div class="thread-item" onclick="alert('帖子加载失败。\n\nHTTP 503 · 服务不可用\n\n此帖子可能已被远程服务器删除。\n标题：【曝光】我知道鸦岭村的幸存者名单\n发帖人：没有明天\n日期：2005-03-14\n\n该用户最后登录时间：2005-03-14\n之后再未登录。')">
+      <span class="thread-title" style="color:#345;">【曝光】我知道鸦岭村的幸存者名单</span>
+      <span class="thread-author">没有明天</span>
+      <span class="thread-replies">—</span>
+      <span class="thread-last">2005-03-14</span>
+    </div>
   </div>
 
   <!-- Thread 1: Timeline -->
@@ -419,11 +432,10 @@
       <div class="post-body">
         <div class="quote">真相追寻者 说：这个项目叫"夜莺"，和一个代码有关：19991231</div>
         <p>19991231 — 那是鸦岭村失踪的日期。1999年12月31日。</p>
-        <p>我查过一些资料。"夜莺计划"（Project Nightingale）在公开渠道完全不存在。但是...</p>
-        <p>我在一个<span class="hidden-link" onclick="this.style.color='var(--accent-red)';Game.addClue('forum-lab-link','论坛中的实验线索','论坛用户提到了一份泄露文件，其中包含实验的详细信息。访问密码是鸦岭村失踪的日期。');document.getElementById('labLink').style.display='block';">军方旧档案的缓存页面里</span>找到了一些东西。需要密码才能访问。</p>
-        <div id="labLink" style="display:none;margin-top:12px;padding:10px;background:#151d28;border-radius:3px;">
-          <p style="color:var(--accent-red);">🔗 <a href="lab-report.html" style="color:var(--accent-red);">点击这里访问泄露文档</a></p>
-          <p style="font-size:0.7rem;color:#567;">密码提示：鸦岭事件发生的日期。</p>
+        <p>我查过一些资料。"夜莺计划"（Project Nightingale）在公开渠道完全不存在。但是我花了很多时间在<span style="color:#345;cursor:pointer;" onclick="this.style.color='var(--accent-red)';Game.addClue('forum-lab-link','论坛中的实验线索','论坛用户夜行者提到了一份泄露文件。访问密码需要从论坛线索中推断。');document.getElementById('labLink').style.display='block';" title="2004年的缓存备份">军方旧档案页面备份</span>里找——很多链接都失效了。</p>
+        <div id="labLink" style="display:none;margin-top:12px;padding:10px;background:#0d1520;border:1px solid #1a2a3a;border-radius:3px;">
+          <p style="font-size:0.7rem;color:#456;">📎 在旧档案缓存中发现了一个可访问的链接。文件标题：【绝密】██计划总结报告。需要8位数字密码。文件日期戳记与鸦岭事件日期吻合。</p>
+          <p style="font-size:0.65rem;color:#345;cursor:pointer;" onclick="window.open('lab-report.html','_blank');">[访问缓存文件]</p>
         </div>
       </div>
     </div>
@@ -566,11 +578,6 @@
 <div class="clue-tracker">
   <button class="clue-tracker-btn" id="clueTrackerBtn" title="查看线索记录">🔍</button>
 </div>
-<div class="status-bar">
-  <span><span class="status-dot warning"></span> 午夜真相论坛 · 缓存存档</span>
-  <span>📡 离线浏览模式</span>
-</div>
-
 <script src="../js/game.js"></script>
 <script>
   function viewThread(id) {

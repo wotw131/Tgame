@@ -406,7 +406,9 @@
         <div class="img-caption">PHOTO-006 · [已损坏]</div>
       </div>
     </div>
-    <button class="btn btn-small mt-3" onclick="Game.addClue('crime-scene-photos','现场照片','餐桌摆着未动的年夜饭，卡车轮胎印指向村外——没有山体滑坡的痕迹。这不是自然灾害。');this.textContent='✓ 线索已记录';this.disabled=true;">记录此发现</button>
+    <p style="font-size:0.65rem;color:#2a2a2a;text-align:center;margin-top:12px;cursor:pointer;" onclick="Game.addClue('crime-scene-photos','现场照片','餐桌摆着未动的年夜饭，卡车轮胎印指向村外——没有山体滑坡的痕迹。这不是自然灾害。');this.style.color='var(--accent-red)';this.textContent='✓ 线索已记录 · 调查笔记本';">
+      点击记录此发现到调查笔记
+    </p>
   </div>
 
   <!-- Tab: Diary -->
@@ -449,11 +451,12 @@
       <div class="torn-edge"></div>
     </div>
 
-    <button class="btn btn-small mt-3" onclick="Game.addClue('diary-zhangwei','张伟的日记','军方在鸦岭村进行代号"夜莺"的记忆替换实验。村民被给予虚假记忆。集体失踪前一晚，军车到达。');this.textContent='✓ 线索已记录';this.disabled=true;">记录此发现</button>
+    <p style="font-size:0.65rem;color:#2a2a2a;text-align:center;margin-top:12px;cursor:pointer;" onclick="Game.addClue('diary-zhangwei','张伟的日记','军方在鸦岭村进行代号"夜莺"的记忆替换实验。村民被给予虚假记忆。集体失踪前一晚，军车到达。');this.style.color='var(--accent-red)';this.textContent='✓ 线索已记录 · 调查笔记本';">点击记录此发现到调查笔记</p>
 
-    <div style="margin-top:20px;padding:16px;background:#111;border-left:3px solid var(--accent-amber);font-size:0.85rem;color:#888;">
-      <p>💡 <strong>注意：</strong>日记中频繁提到"夜莺"。张伟的编号是YN-089。"最后的检查"地点在<span style="color:var(--accent-amber);">村卫生所</span>。</p>
-      <p style="margin-top:8px;">📎 日记中提到一个网络论坛——张伟曾试图在上面求助。论坛地址被涂改，但仍可辨认出部分：<span style="font-family:var(--font-mono);color:var(--accent-amber);">bbs.██████.com/鸦岭</span></p>
+    <div style="margin-top:20px;padding:16px;background:#111;border-left:3px solid #222;font-size:0.85rem;color:#555;">
+      <p style="font-size:0.78rem;">日记最后几页的页脚处，张伟用很小的字写了几行：</p>
+      <p style="font-family:var(--font-mono);font-size:0.7rem;color:#444;">"我在网上的一个论坛求助。有人回复了。他们说这不止发生在鸦岭。还有别的村子。但我找不到更多信息了。论坛的地址是——"</p>
+      <p style="font-size:0.6rem;color:#2a2a2a;margin-top:8px;">（地址被水渍模糊。隐约能看到 "bbs" 和 "鸦岭" 字样。）</p>
     </div>
   </div>
 
@@ -477,7 +480,7 @@
       <p><span class="timestamp">[00:01:02]</span> <span style="color:#444;">[余下部分已损坏]</span></p>
     </div>
 
-    <button class="btn btn-small mt-3" onclick="Game.addClue('military-comms','截获通讯','军方通讯证实鸦岭事件是记忆实验。"滑坡"是人为制造的。241名幸存者被分散安置。提及"047号受试者"。');this.textContent='✓ 线索已记录';this.disabled=true;">记录此发现</button>
+    <p style="font-size:0.65rem;color:#2a2a2a;text-align:center;margin-top:12px;cursor:pointer;" onclick="Game.addClue('military-comms','截获通讯','军方通讯证实鸦岭事件是记忆实验。"滑坡"是人为制造的。241名幸存者被分散安置。提及"047号受试者"。');this.style.color='var(--accent-red)';this.textContent='✓ 线索已记录 · 调查笔记本';">点击记录此发现到调查笔记</p>
   </div>
 
   <!-- Tab: Investigation Report -->
@@ -496,18 +499,23 @@
       <p style="font-weight:700;color:#8b0000;">结论：鸦岭村247名村民的失踪系人为事件。建议立即展开刑事调查，并追查代号"夜莺"的相关方。</p>
       <p style="font-size:0.7rem;color:#666;">[此报告于2004年6月被标记为"不予采纳"。原始副本由王建国私下保存。]</p>
     </div>
-    <button class="btn btn-small mt-2" onclick="Game.addClue('investigation-report','王建国勘查报告','王建国在现场发现地下室入口、军用轮胎印和不明药物。报告结论为人为事件，但被上级驳回。');this.textContent='✓ 线索已记录';this.disabled=true;">记录此发现</button>
+    <p style="font-size:0.65rem;color:#2a2a2a;text-align:center;margin-top:12px;cursor:pointer;" onclick="Game.addClue('investigation-report','王建国勘查报告','王建国在现场发现地下室入口、军用轮胎印和不明药物。报告结论为人为事件，但被上级驳回。');this.style.color='var(--accent-red)';this.textContent='✓ 线索已记录 · 调查笔记本';">点击记录此发现到调查笔记</p>
   </div>
 
-  <!-- Hidden link to forum -->
-  <div style="margin-top:30px;padding:20px;background:#0d1117;border:1px solid #1a2a35;border-radius:4px;text-align:center;">
-    <p style="font-size:0.8rem;color:#444;margin-bottom:8px;">
-      📡 在张伟的日记中提到了一个网址...仔细看日记的最后几行。
+  <!-- Evidence Footer -->
+  <div style="margin-top:30px;padding:20px;background:#0d1117;border:1px solid #151515;border-radius:4px;">
+    <p style="font-size:0.7rem;color:#333;text-align:center;">
+      📡 证据索引完成 · 发现 5 项可查阅证据 · 2 项需要授权 · 1 项已删除<br>
+      <span style="font-size:0.6rem;color:#1a1a1a;">系统检测到外部链接引用 · 来源：证物 EX-002 日记页脚 · bbs.crowridge-truth.com/鸦岭 · 链接状态：已失效</span>
     </p>
-    <p style="font-size:0.75rem;color:#333;">
-      提示：日记底部被涂改的论坛地址。完整地址是 <span style="color:#222;">bbs.crowridge-truth.com/鸦岭</span>
+    <p style="font-size:0.6rem;color:#1a1a1a;text-align:center;margin-top:8px;cursor:pointer;" onclick="this.style.color='var(--accent-red)';window.open('forum.html','_blank');">
+      [缓存存档可用] — 点击访问
     </p>
-    <a href="forum.html" class="btn btn-primary btn-small">访问论坛存档 →</a>
+  </div>
+
+  <!-- Red herring: extra photo evidence that misleads -->
+  <div style="margin-top:16px;padding:12px;background:#0d1117;border:1px solid #1a1a1a;border-radius:4px;cursor:pointer;" onclick="this.innerHTML='<p style=color:#555;font-size:0.8rem;text-align:center;>图片已过期 · 无法加载</p><p style=color:#333;font-size:0.65rem;text-align:center;>原始文件: PHOTO-007_村卫生所内部.jpg<br>上传日期: 2003-10-15<br>上传人: 王建国</p><p style=color:#444;font-size:0.6rem;text-align:center;>此文件因包含敏感内容已被远程服务器删除。</p>';">
+    <p style="font-size:0.75rem;color:#444;text-align:center;">📷 点击查看：PHOTO-007 · 村卫生所内部（王建国拍摄）</p>
   </div>
 </div>
 
@@ -529,11 +537,6 @@
 <div class="clue-tracker">
   <button class="clue-tracker-btn" id="clueTrackerBtn" title="查看线索记录">🔍</button>
 </div>
-<div class="status-bar">
-  <span><span class="status-dot warning"></span> 证据保险库 · 安全连接</span>
-  <span>📁 CR-1999-247-EX</span>
-</div>
-
 <script src="../js/game.js"></script>
 <script>
   function switchTab(tab) {

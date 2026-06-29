@@ -574,10 +574,22 @@
           <span>保密录音带（需授权码）</span>
           <span class="ev-status classified">需要密码</span>
         </li>
-        <li>
-          <span>🔒</span>
+        <li onclick="alert('证据 EX-004 已被永久删除。\n删除时间：2004年6月13日 09:15\n删除人：系统管理员\n删除原因：文件损坏，无法修复。')">
+          <span>🗑️</span>
           <span class="ev-id">EX-004</span>
           <span>军方通讯记录（截获）</span>
+          <span class="ev-status" style="color:#444;">已删除</span>
+        </li>
+        <li onclick="alert('证据 EX-006\n\n类型：DNA样本分析报告\n来源：村卫生所提取\n\n分析结果：\n共提取47份有效样本。\n其中31份与全国DNA数据库\n中的"失踪人口"匹配。\n\n但——这31个"失踪人口"\n目前全部在世。\n在不同的城市。\n用不同的名字。\n\n此份报告被标注为\n"分析错误 · 样本污染"\n不予采纳。')">
+          <span>📄</span>
+          <span class="ev-id">EX-006</span>
+          <span>DNA样本分析报告</span>
+          <span class="ev-status" style="color:var(--accent-amber);">存疑</span>
+        </li>
+        <li onclick="alert('无法访问 EX-007\n\n此证据由王建国警官于2004年5月\n亲自封存。需要王建国的个人密码。\n\n密码提示：他的警号。\n\n（点击其他地方继续...）')">
+          <span>🔒</span>
+          <span class="ev-id">EX-007</span>
+          <span>王建国私人笔记（封存）</span>
           <span class="ev-status classified">需要密码</span>
         </li>
         <li onclick="window.open('evidence.html','_blank')">
@@ -591,14 +603,14 @@
       <!-- Evidence Room Access -->
       <div class="code-area mt-3">
         <div class="code-hint">
-          🔒 完整证据库需要授权码访问<br>
-          <span style="font-size:0.7rem;color:#444;">提示：王建国在他的笔记中留下了一个代码...仔细观察上面的记录。</span>
+          🔒 完整证据库需要授权码访问
         </div>
         <div class="input-group" style="justify-content:center;">
           <input type="text" class="input-field" id="evidenceCode" placeholder="输入授权码..." style="max-width:280px;">
           <button class="btn btn-primary" onclick="checkEvidenceCode()">验证</button>
         </div>
         <div id="codeResult" style="margin-top:8px;font-size:0.8rem;"></div>
+        <p style="font-size:0.6rem;color:#1a1a1a;margin-top:8px;text-align:center;">系统日志：最后授权查询 2004-06-12 21:47:03 · 查询人 王建国</p>
       </div>
     </div>
   </div>
@@ -654,14 +666,20 @@
       <p style="font-size:0.8rem;color:#555;margin-top:12px;">
         ⚠️ 2000年3月的图像中，村庄建筑轮廓仍然清晰可见。没有山体滑坡的地质痕迹。王建国标注了两个"异常热源点"——这些点在后来的图像中被模糊处理。
       </p>
-      <button class="btn btn-small mt-2" onclick="Game.addClue('satellite-anomaly','卫星图像异常','2000年3月的卫星图像显示鸦岭村完好无损。官方声称的山体滑坡是谎言。村庄被标记为存在但被军方管控。');this.textContent='✓ 线索已记录';this.disabled=true;">记录此线索</button>
+      <p style="font-size:0.65rem;color:#2a2a2a;text-align:center;margin-top:12px;cursor:pointer;" onclick="Game.addClue('satellite-anomaly','卫星图像异常','2000年3月的卫星图像显示鸦岭村完好无损。官方声称的山体滑坡是谎言。');this.style.color='var(--accent-red)';this.textContent='✓ 线索已记录 · 调查笔记本';">点击记录此发现到调查笔记</p>
     </div>
   </div>
 
-  <!-- Hidden reference number -->
-  <div class="section-panel scroll-reveal" style="opacity:0.5;">
-    <div class="section-body open" style="display:block;text-align:center;font-family:var(--font-mono);font-size:0.7rem;color:#222;">
-      系统日志 · 王建国最后查询 · 2004-06-12 21:47:03 · 查询关键词：N1GHT1NG4L3 · 查询状态：已拦截
+  <!-- Footer - subtle system log -->
+  <div style="text-align:center;font-family:var(--font-mono);font-size:0.55rem;color:#151515;margin-top:30px;padding:10px;user-select:text;cursor:text;">
+    冷案数据库 v3.7 · 公安内网节点 · 最后维护 2004-06-12 · 节点编号 ██-047 · 查询日志 N1GHT1NG4L3 · 状态 已拦截
+  </div>
+
+  <!-- Red herring: fake document link that leads nowhere useful -->
+  <div class="section-panel scroll-reveal" style="opacity:0.4;">
+    <div class="section-body open" style="display:block;text-align:center;font-size:0.75rem;color:#2a2a2a;">
+      📎 关联案件：S市连环失踪案（2001-2003）· 13名受害人 · 已结案 · 与本案无关
+      <br><span style="font-size:0.6rem;cursor:pointer;" onclick="this.style.color='var(--accent-red)';this.innerHTML='链接已失效。该案件档案于2004年6月被移除。';">[查看关联案件]</span>
     </div>
   </div>
 
@@ -687,11 +705,6 @@
   <button class="clue-tracker-btn" id="clueTrackerBtn" title="查看线索记录">🔍</button>
 </div>
 
-<div class="status-bar">
-  <span><span class="status-dot warning"></span> 冷案数据库 · CR-1999-247</span>
-  <span>⏱️ 会话已持续: <span id="sessionTime">00:00</span></span>
-</div>
-
 <script src="../js/game.js"></script>
 <script>
   // Toggle sections
@@ -713,9 +726,9 @@
         window.open('evidence.html', '_blank');
       }, 1500);
     } else if (input.value.trim().toUpperCase() === 'NIGHTINGALE') {
-      result.innerHTML = '<span style="color:var(--accent-amber);">接近了...但还差一点。注意王建国查询日志中的字符。</span>';
+      result.innerHTML = '<span style="color:var(--accent-amber);">部分匹配。授权码包含字母和数字。</span>';
     } else if (input.value.trim().length > 0) {
-      result.innerHTML = '<span style="color:var(--accent-red);">✗ 授权码错误。请仔细阅读案件记录。</span>';
+      result.innerHTML = '<span style="color:var(--accent-red);">✗ 授权码无效。</span>';
     }
   }
 
