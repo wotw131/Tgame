@@ -262,6 +262,32 @@
     border: none;
   }
 
+  /* Photo grain overlay */
+  .photo-grain {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.015) 0px,
+      rgba(0,0,0,0.02) 1px,
+      rgba(255,255,255,0.01) 2px,
+      rgba(0,0,0,0.015) 3px
+    );
+    mix-blend-mode: overlay;
+    opacity: 0.5;
+  }
+
+  .img-box {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .img-box svg {
+    display: block;
+  }
+
   /* Blood-stain text */
   .blood-text {
     color: #8b0000;
@@ -369,41 +395,265 @@
   <div class="ev-content active" id="tab-photos">
     <h3 style="margin-bottom:16px;color:#aaa;">现场照片 (2000年1月3日 · 搜救队拍摄)</h3>
     <div class="photo-evidence">
+      <!-- PHOTO-001: Village Entrance -->
       <div class="photo-card-ev" onclick="openPhoto('village-entrance')">
         <div class="img-box">
-          <svg viewBox="0 0 100 70" width="100%"><rect width="100" height="70" fill="#1a1a1a"/><rect x="10" y="20" width="80" height="3" fill="#333"/><rect x="15" y="30" width="15" height="25" fill="#222"/><rect x="40" y="25" width="20" height="30" fill="#222"/><rect x="70" y="28" width="15" height="27" fill="#222"/><text x="50" y="60" text-anchor="middle" fill="#444" font-size="8">村口</text></svg>
+          <svg viewBox="0 0 240 170" width="100%" preserveAspectRatio="xMidYMid slice" style="background:#1a1814;">
+            <!-- Sky - overcast winter -->
+            <rect width="240" height="80" fill="#2a2824"/>
+            <rect width="240" height="80" fill="url(#skyGrad)" opacity="0.3"/>
+            <defs><linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a3834"/><stop offset="100%" stop-color="#2a2820"/></linearGradient></defs>
+            <!-- Mountains -->
+            <polygon points="0,75 40,30 80,65 120,20 160,60 200,35 240,70 240,85 0,85" fill="#1a1a18"/>
+            <polygon points="0,75 40,30 80,65 120,20 160,60 200,35 240,70 240,85 0,85" fill="#1e1e1a" opacity="0.5"/>
+            <!-- Snow on ground -->
+            <ellipse cx="120" cy="140" rx="130" ry="35" fill="#e8e4dc" opacity="0.12"/>
+            <rect y="115" width="240" height="55" fill="#c8c4bc" opacity="0.08"/>
+            <!-- Village road -->
+            <polygon points="100,170 120,105 130,105 140,170" fill="#1a1815"/>
+            <!-- House 1 - left -->
+            <rect x="20" y="65" width="55" height="45" fill="#2a2218" rx="1"/>
+            <polygon points="15,65 47,40 80,65" fill="#3a3020"/>
+            <rect x="32" y="78" width="10" height="14" fill="#1a1008"/>
+            <rect x="52" y="78" width="10" height="14" fill="#1a1008"/>
+            <rect x="36" y="95" width="18" height="15" fill="#1a1008"/>
+            <!-- House 2 - center -->
+            <rect x="85" y="62" width="62" height="48" fill="#2e2618" rx="1"/>
+            <polygon points="78,62 116,35 154,62" fill="#3e3424"/>
+            <rect x="98" y="75" width="10" height="14" fill="#1a1008"/>
+            <rect x="120" y="75" width="10" height="14" fill="#1a1008"/>
+            <rect x="104" y="92" width="22" height="18" fill="#1a1008"/>
+            <!-- House 3 - right -->
+            <rect x="160" y="68" width="50" height="42" fill="#282018" rx="1"/>
+            <polygon points="155,68 185,44 215,68" fill="#383020"/>
+            <rect x="172" y="80" width="9" height="13" fill="#1a1008"/>
+            <rect x="190" y="80" width="9" height="13" fill="#1a1008"/>
+            <!-- Bare winter trees -->
+            <line x1="30" y1="55" x2="30" y2="25" stroke="#1a1814" stroke-width="2"/>
+            <line x1="20" y1="35" x2="35" y2="22" stroke="#1a1814" stroke-width="1"/>
+            <line x1="35" y1="30" x2="25" y2="20" stroke="#1a1814" stroke-width="1"/>
+            <line x1="200" y1="58" x2="200" y2="28" stroke="#1a1814" stroke-width="2"/>
+            <line x1="190" y1="38" x2="205" y2="25" stroke="#1a1814" stroke-width="1"/>
+            <line x1="208" y1="33" x2="198" y2="22" stroke="#1a1814" stroke-width="1"/>
+            <!-- Village gate/arch -->
+            <rect x="140" y="80" width="3" height="35" fill="#1a1008"/>
+            <rect x="157" y="80" width="3" height="35" fill="#1a1008"/>
+            <text x="148" y="108" fill="#3a3020" font-size="5" font-family="serif" transform="rotate(-90,148,108)">鸦岭村</text>
+            <!-- Faded banner -->
+            <rect x="105" y="90" width="2" height="20" fill="#3a2a1a"/>
+            <rect x="153" y="90" width="2" height="20" fill="#3a2a1a"/>
+            <line x1="107" y1="92" x2="153" y2="92" stroke="#4a3020" stroke-width="1"/>
+            <!-- Film grain overlay -->
+            <rect width="240" height="170" fill="url(#noise)" opacity="0.06"/>
+            <defs><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter></defs>
+            <!-- Photo timestamp -->
+            <text x="8" y="164" fill="#ff6600" font-size="5" font-family="monospace" opacity="0.7">2000-01-03 09:47</text>
+          </svg>
+          <div class="photo-grain"></div>
         </div>
         <div class="img-caption">PHOTO-001 · 鸦岭村村口</div>
       </div>
+
+      <!-- PHOTO-002: Empty House Interior -->
       <div class="photo-card-ev" onclick="openPhoto('empty-house')">
         <div class="img-box">
-          <svg viewBox="0 0 100 70" width="100%"><rect width="100" height="70" fill="#1a1a1a"/><rect x="25" y="15" width="50" height="40" fill="#222"/><rect x="35" y="25" width="8" height="12" fill="#1a1a1a"/><rect x="55" y="25" width="8" height="12" fill="#1a1a1a"/><rect x="42" y="40" width="16" height="15" fill="#1a1a1a"/></svg>
+          <svg viewBox="0 0 240 170" width="100%" preserveAspectRatio="xMidYMid slice" style="background:#1a1612;">
+            <!-- Interior walls -->
+            <rect width="240" height="170" fill="#2a241c"/>
+            <!-- Back wall -->
+            <rect x="10" y="15" width="220" height="100" fill="#3a3228"/>
+            <!-- Floor -->
+            <rect x="10" y="115" width="220" height="55" fill="#2a2018"/>
+            <!-- Floor boards -->
+            <line x1="10" y1="125" x2="230" y2="125" stroke="#1a1410" stroke-width="0.5"/>
+            <line x1="10" y1="135" x2="230" y2="135" stroke="#1a1410" stroke-width="0.5"/>
+            <line x1="10" y1="145" x2="230" y2="145" stroke="#1a1410" stroke-width="0.5"/>
+            <!-- Window -->
+            <rect x="140" y="30" width="35" height="30" fill="#5a6a7a" rx="1"/>
+            <rect x="140" y="30" width="35" height="30" fill="#3a4a5a" opacity="0.5"/>
+            <line x1="157" y1="30" x2="157" y2="60" stroke="#2a2218" stroke-width="1.5"/>
+            <line x1="140" y1="45" x2="175" y2="45" stroke="#2a2218" stroke-width="1.5"/>
+            <!-- Kang (traditional heated bed) -->
+            <rect x="25" y="80" width="100" height="35" fill="#4a3a28" rx="2"/>
+            <rect x="28" y="83" width="94" height="29" fill="#5a4a35"/>
+            <!-- Blanket on kang -->
+            <rect x="35" y="86" width="55" height="20" fill="#6a3a2a" rx="3"/>
+            <rect x="35" y="86" width="55" height="20" fill="#7a4a3a" opacity="0.4"/>
+            <!-- Pillow -->
+            <ellipse cx="45" cy="90" rx="10" ry="6" fill="#8a7a6a"/>
+            <!-- Wooden table -->
+            <rect x="160" y="75" width="55" height="3" fill="#4a3828"/>
+            <rect x="165" y="78" width="3" height="37" fill="#3a2818"/>
+            <rect x="207" y="78" width="3" height="37" fill="#3a2818"/>
+            <!-- Bowl on table -->
+            <ellipse cx="185" cy="74" rx="10" ry="4" fill="#6a5a4a"/>
+            <ellipse cx="185" cy="74" rx="8" ry="3" fill="#4a3a2a"/>
+            <!-- Chopsticks -->
+            <line x1="178" y1="73" x2="190" y2="68" stroke="#8a6a4a" stroke-width="1.5"/>
+            <line x1="180" y1="74" x2="192" y2="70" stroke="#8a6a4a" stroke-width="1"/>
+            <!-- Calendar on wall -->
+            <rect x="50" y="28" width="18" height="22" fill="#e8e0d0" rx="1"/>
+            <text x="54" y="38" fill="#1a1a1a" font-size="5" font-family="serif">12</text>
+            <text x="58" y="46" fill="#cc0000" font-size="3" font-family="serif">31</text>
+            <!-- Scattered items on floor -->
+            <ellipse cx="180" cy="130" rx="6" ry="3" fill="#3a2a1a"/>
+            <rect x="100" y="125" width="12" height="8" fill="#2a1a10" rx="1"/>
+            <!-- Film grain -->
+            <rect width="240" height="170" fill="url(#noise)" opacity="0.06"/>
+            <text x="8" y="164" fill="#ff6600" font-size="5" font-family="monospace" opacity="0.7">2000-01-03 11:23</text>
+          </svg>
+          <div class="photo-grain"></div>
         </div>
-        <div class="img-caption">PHOTO-002 · 空无一人的民宅</div>
+        <div class="img-caption">PHOTO-002 · 空无一人的民宅内部</div>
       </div>
+
+      <!-- PHOTO-003: Table with Food (Key Evidence) -->
       <div class="photo-card-ev" onclick="openPhoto('table-setting')">
         <div class="img-box" style="position:relative;">
-          <svg viewBox="0 0 100 70" width="100%"><rect width="100" height="70" fill="#1a1a1a"/><rect x="20" y="40" width="60" height="4" fill="#333"/><circle cx="35" cy="35" r="4" fill="#2a2a2a"/><circle cx="50" cy="33" r="4" fill="#2a2a2a"/><circle cx="65" cy="35" r="4" fill="#2a2a2a"/></svg>
-          <span style="position:absolute;top:8px;right:8px;background:var(--accent-red);color:#fff;font-size:0.55rem;padding:2px 4px;border-radius:2px;">关键</span>
+          <svg viewBox="0 0 240 170" width="100%" preserveAspectRatio="xMidYMid slice" style="background:#1a1612;">
+            <!-- Room -->
+            <rect width="240" height="170" fill="#2a241c"/>
+            <rect x="10" y="10" width="220" height="100" fill="#3a3228"/>
+            <rect x="10" y="110" width="220" height="60" fill="#2a2018"/>
+            <!-- Round table -->
+            <ellipse cx="120" cy="90" rx="65" ry="18" fill="#4a3828"/>
+            <ellipse cx="120" cy="88" rx="60" ry="15" fill="#5a4a38"/>
+            <!-- Dishes on table -->
+            <ellipse cx="90" cy="82" rx="16" ry="6" fill="#7a6a5a"/>
+            <ellipse cx="90" cy="81" rx="14" ry="5" fill="#8a7860"/>
+            <ellipse cx="145" cy="83" rx="14" ry="5" fill="#7a6a5a"/>
+            <ellipse cx="145" cy="82" rx="12" ry="4" fill="#8a7860"/>
+            <ellipse cx="115" cy="78" rx="12" ry="5" fill="#6a5a4a"/>
+            <!-- Bowl with food -->
+            <ellipse cx="75" cy="85" rx="10" ry="4" fill="#8a7868"/>
+            <ellipse cx="75" cy="84" rx="8" ry="3" fill="#a09078"/>
+            <!-- Rice bowls -->
+            <ellipse cx="95" cy="87" rx="7" ry="3" fill="#e8e0d0"/>
+            <ellipse cx="125" cy="86" rx="7" ry="3" fill="#e8e0d0"/>
+            <ellipse cx="150" cy="87" rx="7" ry="3" fill="#e8e0d0"/>
+            <!-- Chopsticks (placed neatly - nobody ate) -->
+            <line x1="88" y1="85" x2="98" y2="80" stroke="#6a4a2a" stroke-width="1"/>
+            <line x1="118" y1="84" x2="128" y2="79" stroke="#6a4a2a" stroke-width="1"/>
+            <line x1="143" y1="85" x2="153" y2="80" stroke="#6a4a2a" stroke-width="1"/>
+            <!-- Steam (cold - food uneaten for days) -->
+            <path d="M90,76 Q92,70 88,64" fill="none" stroke="#aaa" stroke-width="0.5" opacity="0.3"/>
+            <path d="M145,77 Q147,71 143,65" fill="none" stroke="#aaa" stroke-width="0.5" opacity="0.3"/>
+            <!-- Tea pot -->
+            <ellipse cx="160" cy="80" rx="8" ry="5" fill="#6a5a3a"/>
+            <rect x="157" y="72" width="6" height="8" fill="#6a5a3a" rx="1"/>
+            <!-- Cups -->
+            <ellipse cx="168" cy="84" rx="5" ry="3" fill="#8a7860"/>
+            <ellipse cx="178" cy="85" rx="5" ry="3" fill="#8a7860"/>
+            <ellipse cx="173" cy="83" rx="5" ry="3" fill="#8a7860"/>
+            <!-- Stool/chair pushed back -->
+            <rect x="45" y="115" width="18" height="3" fill="#4a3828"/>
+            <rect x="50" y="118" width="3" height="25" fill="#3a2818"/>
+            <rect x="58" y="118" width="3" height="25" fill="#3a2818"/>
+            <!-- Film grain -->
+            <rect width="240" height="170" fill="url(#noise)" opacity="0.06"/>
+            <text x="8" y="164" fill="#ff6600" font-size="5" font-family="monospace" opacity="0.7">2000-01-03 12:05</text>
+          </svg>
+          <span style="position:absolute;top:6px;right:6px;background:var(--accent-red);color:#fff;font-size:0.5rem;padding:2px 5px;border-radius:2px;z-index:2;">关键证物</span>
+          <div class="photo-grain"></div>
         </div>
-        <div class="img-caption">PHOTO-003 · 摆着饭菜的餐桌</div>
+        <div class="img-caption">PHOTO-003 · 摆着年夜饭的餐桌</div>
       </div>
+
+      <!-- PHOTO-004: Village Clinic -->
       <div class="photo-card-ev" onclick="openPhoto('clinic')">
         <div class="img-box">
-          <svg viewBox="0 0 100 70" width="100%"><rect width="100" height="70" fill="#1a1a1a"/><rect x="30" y="10" width="40" height="50" fill="#222"/><text x="50" y="42" text-anchor="middle" fill="#fff" font-size="12">+</text></svg>
+          <svg viewBox="0 0 240 170" width="100%" preserveAspectRatio="xMidYMid slice" style="background:#1a1814;">
+            <!-- Sky -->
+            <rect width="240" height="60" fill="#2a2824"/>
+            <!-- Trees -->
+            <rect x="10" y="30" width="8" height="35" fill="#1a1410"/>
+            <ellipse cx="14" cy="28" rx="12" ry="15" fill="#1a1812"/>
+            <rect x="185" y="28" width="8" height="37" fill="#1a1410"/>
+            <ellipse cx="189" cy="24" rx="14" ry="18" fill="#1a1812"/>
+            <!-- Clinic building -->
+            <rect x="40" y="50" width="160" height="80" fill="#d8d4c8"/>
+            <rect x="40" y="50" width="160" height="80" fill="#e0dcd0" opacity="0.5"/>
+            <!-- Roof -->
+            <polygon points="30,50 120,10 210,50" fill="#3a3028"/>
+            <!-- Red Cross -->
+            <rect x="108" y="58" width="8" height="24" fill="#cc0000"/>
+            <rect x="100" y="66" width="24" height="8" fill="#cc0000"/>
+            <!-- Door -->
+            <rect x="105" y="105" width="30" height="25" fill="#1a1410"/>
+            <rect x="108" y="108" width="10" height="19" fill="#2a2420"/>
+            <!-- Windows -->
+            <rect x="55" y="75" width="20" height="20" fill="#4a5a6a"/>
+            <rect x="165" y="75" width="20" height="20" fill="#4a5a6a"/>
+            <line x1="65" y1="75" x2="65" y2="95" stroke="#d8d4c8" stroke-width="2"/>
+            <line x1="55" y1="85" x2="75" y2="85" stroke="#d8d4c8" stroke-width="2"/>
+            <line x1="175" y1="75" x2="175" y2="95" stroke="#d8d4c8" stroke-width="2"/>
+            <line x1="165" y1="85" x2="185" y2="85" stroke="#d8d4c8" stroke-width="2"/>
+            <!-- Snow on ground -->
+            <ellipse cx="120" cy="135" rx="100" ry="10" fill="#e8e4dc" opacity="0.1"/>
+            <!-- Hidden basement entrance (behind clinic) -->
+            <rect x="90" y="130" width="30" height="4" fill="#3a3028"/>
+            <text x="105" y="140" fill="#662222" font-size="4" text-anchor="middle" font-family="monospace">YN-P</text>
+            <!-- Anomaly glow from basement -->
+            <ellipse cx="105" cy="132" rx="15" ry="5" fill="#ff0000" opacity="0.06"/>
+            <!-- Film grain -->
+            <rect width="240" height="170" fill="url(#noise)" opacity="0.06"/>
+            <text x="8" y="164" fill="#ff6600" font-size="5" font-family="monospace" opacity="0.7">2000-01-03 14:31</text>
+          </svg>
+          <div class="photo-grain"></div>
         </div>
         <div class="img-caption">PHOTO-004 · 村卫生所</div>
       </div>
+
+      <!-- PHOTO-005: Tire Tracks (Key Evidence) -->
       <div class="photo-card-ev" onclick="openPhoto('truck-tracks')">
         <div class="img-box" style="position:relative;">
-          <svg viewBox="0 0 100 70" width="100%"><rect width="100" height="70" fill="#1a1a1a"/><rect x="0" y="45" width="100" height="5" fill="#222"/><rect x="10" y="42" width="8" height="3" fill="#2a2a2a"/><rect x="30" y="42" width="8" height="3" fill="#2a2a2a"/><rect x="55" y="42" width="8" height="3" fill="#2a2a2a"/><rect x="80" y="42" width="8" height="3" fill="#2a2a2a"/></svg>
-          <span style="position:absolute;top:8px;right:8px;background:var(--accent-red);color:#fff;font-size:0.55rem;padding:2px 4px;border-radius:2px;">关键</span>
+          <svg viewBox="0 0 240 170" width="100%" preserveAspectRatio="xMidYMid slice" style="background:#1a1814;">
+            <!-- Sky -->
+            <rect width="240" height="50" fill="#2a2824"/>
+            <!-- Distant trees -->
+            <rect x="0" y="30" width="240" height="25" fill="#1a1410" opacity="0.4"/>
+            <!-- Dirt road -->
+            <rect y="55" width="240" height="115" fill="#3a3228"/>
+            <rect y="55" width="240" height="115" fill="url(#mudGrad)"/>
+            <defs><linearGradient id="mudGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4a3a28"/><stop offset="100%" stop-color="#2a1a10"/></linearGradient></defs>
+            <!-- Snow patches on road edges -->
+            <ellipse cx="10" cy="70" rx="20" ry="8" fill="#e8e4dc" opacity="0.08"/>
+            <ellipse cx="230" cy="90" rx="25" ry="10" fill="#e8e4dc" opacity="0.07"/>
+            <!-- DEEP TIRE TRACKS - left pair -->
+            <path d="M0,72 Q60,68 120,75 Q180,82 240,78" fill="none" stroke="#1a0e08" stroke-width="8" opacity="0.8"/>
+            <path d="M0,82 Q60,78 120,85 Q180,92 240,88" fill="none" stroke="#1a0e08" stroke-width="8" opacity="0.8"/>
+            <!-- DEEP TIRE TRACKS - right pair -->
+            <path d="M0,95 Q60,91 120,98 Q180,105 240,101" fill="none" stroke="#1a0e08" stroke-width="8" opacity="0.8"/>
+            <path d="M0,105 Q60,101 120,108 Q180,115 240,111" fill="none" stroke="#1a0e08" stroke-width="8" opacity="0.8"/>
+            <!-- Track details - tread pattern -->
+            <path d="M20,74 L25,74 M35,76 L40,76 M50,74 L55,74" stroke="#0a0604" stroke-width="3" opacity="0.6"/>
+            <path d="M80,78 L85,78 M100,80 L105,80 M115,79 L120,79" stroke="#0a0604" stroke-width="3" opacity="0.6"/>
+            <path d="M20,97 L25,97 M40,99 L45,99 M60,98 L65,98" stroke="#0a0604" stroke-width="3" opacity="0.6"/>
+            <!-- Mud splatter -->
+            <ellipse cx="150" cy="90" rx="8" ry="3" fill="#3a2a1a" opacity="0.5"/>
+            <ellipse cx="70" cy="100" rx="12" ry="4" fill="#3a2a1a" opacity="0.4"/>
+            <!-- Scale marker (investigator added) -->
+            <rect x="195" y="120" width="30" height="2" fill="#fff" opacity="0.6"/>
+            <text x="210" y="135" fill="#fff" font-size="4" text-anchor="middle" font-family="monospace" opacity="0.5">30cm</text>
+            <!-- Arrow pointing at tracks -->
+            <line x1="200" y1="145" x2="200" y2="125" stroke="#fff" stroke-width="0.5" opacity="0.4"/>
+            <polygon points="197,128 200,122 203,128" fill="#fff" opacity="0.4"/>
+            <!-- Film grain -->
+            <rect width="240" height="170" fill="url(#noise)" opacity="0.06"/>
+            <text x="8" y="164" fill="#ff6600" font-size="5" font-family="monospace" opacity="0.7">2000-01-03 15:55</text>
+          </svg>
+          <span style="position:absolute;top:6px;right:6px;background:var(--accent-red);color:#fff;font-size:0.5rem;padding:2px 5px;border-radius:2px;z-index:2;">关键证物</span>
+          <div class="photo-grain"></div>
         </div>
-        <div class="img-caption">PHOTO-005 · 卡车轮胎印</div>
+        <div class="img-caption">PHOTO-005 · 重型车辆轮胎印</div>
       </div>
-      <div class="photo-card-ev">
-        <div class="img-box" style="opacity:0.3;">🔒</div>
-        <div class="img-caption">PHOTO-006 · [已损坏]</div>
+
+      <!-- PHOTO-006: Corrupted -->
+      <div class="photo-card-ev" onclick="this.querySelector('.img-box').innerHTML='<span style=color:#662222;font-size:0.6rem;text-align:center;display:block;padding:20px;>文件头损坏<br>无法解码<br><br>EXIF数据残留：<br>2000-01-03 16:47<br>GPS: 未知坐标</span>';">
+        <div class="img-box" style="background:#0a0a0a;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+          <span style="color:#1a1a1a;font-size:0.7rem;">⚠ 文件损坏</span>
+        </div>
+        <div class="img-caption">PHOTO-006 · [数据损坏]</div>
       </div>
     </div>
     <p style="font-size:0.65rem;color:#2a2a2a;text-align:center;margin-top:12px;cursor:pointer;" onclick="Game.addClue('crime-scene-photos','现场照片','餐桌摆着未动的年夜饭，卡车轮胎印指向村外——没有山体滑坡的痕迹。这不是自然灾害。');this.style.color='var(--accent-red)';this.textContent='✓ 线索已记录 · 调查笔记本';">
@@ -547,23 +797,33 @@
   }
 
   function openPhoto(id) {
-    const titles = {
-      'village-entrance': '鸦岭村村口 — 空无一人，建筑完好',
-      'empty-house': '民宅内部 — 生活用品完整，居民突然离开',
-      'table-setting': '摆着年夜饭的餐桌 — 饭菜未动，筷子整齐摆放',
-      'clinic': '村卫生所 — 后方发现被填埋的地下室入口',
-      'truck-tracks': '重型车辆轮胎印 — 匹配特定型号运输车'
+    const photoData = {
+      'village-entrance': { title: 'PHOTO-001 · 鸦岭村村口', desc: '拍摄时间：2000年1月3日 09:47 · 拍摄人：搜救队员 李明辉\n\n村庄建筑完好，无山体滑坡痕迹。村口积雪未清除——说明在事发后无人进出。村门上的"鸦岭村"木牌仍在。远处可见三户民宅和一个废弃的岗哨。', icon: '🏘️' },
+      'empty-house': { title: 'PHOTO-002 · 民宅内部（张伟家）', desc: '拍摄时间：2000年1月3日 11:23 · 拍摄人：搜救队员 李明辉\n\n生活用品完整。床上被褥未叠。墙上的日历停留在1999年12月31日。桌上放着一只碗和一双筷子——碗里还有半碗米饭。灶台冰冷，已熄灭多日。居民在日常活动中突然中断。', icon: '🏚️' },
+      'table-setting': { title: 'PHOTO-003 · 年夜饭餐桌 【关键证物】', desc: '拍摄时间：2000年1月3日 12:05 · 拍摄人：搜救队员 李明辉\n\n餐桌上摆满菜肴——红烧肉、清蒸鱼、饺子、几碟小菜。六副碗筷整齐摆放。茶水已凉，表面结了一层薄冰。饭菜未动。这是除夕夜的团圆饭。一桌人在吃饭前同时消失了。', icon: '🍽️' },
+      'clinic': { title: 'PHOTO-004 · 村卫生所', desc: '拍摄时间：2000年1月3日 14:31 · 拍摄人：搜救队员 李明辉\n\n小型单层建筑，外墙刷白灰。门上方有红十字标志。后方地面发现新填水泥——约2米×3米范围，水泥尚未完全干透。水泥表面刻有"YN-P"字样。后被证实下方为地下室入口。', icon: '🏥' },
+      'truck-tracks': { title: 'PHOTO-005 · 村口主路轮胎印 【关键证物】', desc: '拍摄时间：2000年1月3日 15:55 · 拍摄人：搜救队员 李明辉\n\n路面发现多组重型车辆双轮胎印痕。胎面宽度和纹路间距与重型运输车辆匹配。至少四辆大型车辆经过。轮胎印指向村外主路方向——与官方所称"北侧山体滑坡"方向正相反。', icon: '🚛' }
     };
+    const data = photoData[id] || { title: id, desc: '无详细信息', icon: '📷' };
     const modal = document.createElement('div');
-    modal.className = 'photo-modal';
-    modal.innerHTML = `
-      <button class="photo-modal-close" onclick="this.parentElement.remove()">✕</button>
-      <div class="photo-modal-content">
-        <div style="font-size:6rem;margin-bottom:16px;">📷</div>
-        <p style="color:#ccc;font-family:var(--font-mono);">${titles[id] || id}</p>
-        <p style="color:#555;font-size:0.8rem;margin-top:8px;">[图像已从原始数据库中恢复]</p>
-      </div>
-    `;
+    modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.93);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;';
+    modal.innerHTML = '<button style="position:absolute;top:16px;right:24px;color:#888;font-size:1.8rem;cursor:pointer;background:none;border:none;z-index:10;" onclick="this.parentElement.remove()">✕</button>' +
+      '<div style="max-width:600px;width:100%;max-height:85vh;overflow-y:auto;">' +
+        '<div style="background:#1a1a1a;border:1px solid #333;border-radius:4px;overflow:hidden;">' +
+          '<div style="background:#111;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-family:monospace;font-size:0.68rem;color:#555;">' +
+            '<span>🔍 证据查看器</span>' +
+            '<span style="color:var(--accent-red);">CR-1999-247 · EVIDENCE ARCHIVE</span>' +
+          '</div>' +
+          '<div style="padding:32px 20px;background:#0d0d0d;text-align:center;">' +
+            '<div style="font-size:5rem;margin-bottom:12px;opacity:0.5;">' + data.icon + '</div>' +
+            '<p style="color:#555;font-size:0.65rem;">[图像已从原始数据库中恢复 · 低分辨率预览]</p>' +
+          '</div>' +
+          '<div style="padding:20px 24px;background:#111;text-align:left;">' +
+            '<h3 style="color:#ccc;font-size:0.9rem;margin-bottom:12px;">' + data.title + '</h3>' +
+            '<p style="color:#888;font-size:0.78rem;line-height:1.9;white-space:pre-line;">' + data.desc + '</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
     modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
     document.body.appendChild(modal);
   }
